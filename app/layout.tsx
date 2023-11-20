@@ -25,11 +25,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${catamaran.variable}`}>
-      <body className="bg-slate-50 flex flex-col min-h-screen">
+      <body className="bg-slate-50 flex flex-col h-screen">
         <header>
           <Header />
         </header>
-        <main className="grow py-3">{children}</main>
+        <main className="grow">{children}</main>
         <footer>
           <Footer />
         </footer>

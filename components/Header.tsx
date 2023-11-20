@@ -1,7 +1,11 @@
 import { BeakerIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
-const links = ["Service", "Blog", "Tutorials"];
+const links = [
+  { slug: "servise", title: "Service" },
+  { slug: "blog", title: "Blog" },
+  { slug: "tutorials", title: "Tutorials" },
+];
 
 function Header() {
   return (
@@ -10,8 +14,8 @@ function Header() {
       <p className="text-gray-100 ml-4 font-semibold text-2xl mr-auto">MyApp</p>
       <ul className="flex gap-6 list-none text-gray-100 font-semibold">
         {links.map((link) => (
-          <li key={link}>
-            <Link href={"#"}>{link}</Link>
+          <li key={link.slug}>
+            <Link href={link.slug}>{link.title}</Link>
           </li>
         ))}
       </ul>
