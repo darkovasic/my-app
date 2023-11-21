@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata } from "next";
 import { Catamaran, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -22,7 +22,11 @@ export const metadata: Metadata = {
   description: "My sandbox project.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className={`${catamaran.variable}`}>
       <body className="bg-slate-50 flex flex-col h-screen">
