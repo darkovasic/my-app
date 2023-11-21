@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header>
           <Header />
         </header>
-        <main className="grow">{children}</main>
+        <main className="flex grow">{children}</main>
         <footer>
           <Footer />
         </footer>

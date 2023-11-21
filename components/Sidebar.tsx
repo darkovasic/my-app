@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import { createContext, useState } from "react";
@@ -8,8 +6,9 @@ export const SidebarContext = createContext({ expanded: true });
 
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const [expanded, setExpanded] = useState(true);
+  console.log("[Sidebar] rendering:");
   return (
-    <aside className="h-screen  w-60">
+    <aside>
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <Image
