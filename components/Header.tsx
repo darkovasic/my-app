@@ -2,7 +2,7 @@ import { BeakerIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
 const links = [
-  { slug: "servise", title: "Service" },
+  { slug: "service", title: "Service" },
   { slug: "blog", title: "Blog" },
   { slug: "tutorials", title: "Tutorials" },
 ];

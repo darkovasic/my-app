@@ -1,11 +1,11 @@
-const TutorialsPage = () => {
+const ServicePage = () => {
   return (
     <div className="flex flex-1">
       <section className="flex flex-1 items-center justify-center">
-        Tutorials Page
+        Service Page
       </section>
     </div>
   );
 };
 
-export default TutorialsPage;
+export default ServicePage;
