@@ -13,7 +13,7 @@ import {
   Settings,
 } from "lucide-react";
 
-function HomeSidebar() {
+function ServiceSidebar() {
   return (
     <Sidebar>
       <SidebarItem Icon={LayoutDashboard} text={"Dashboard"} alert />
@@ -29,4 +29,4 @@ function HomeSidebar() {
   );
 }
 
-export default HomeSidebar;
+export default ServiceSidebar;
