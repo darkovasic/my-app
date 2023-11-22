@@ -9,12 +9,7 @@ type SidebarItemProps = {
   alert?: boolean;
 };
 
-export const SidebarItem = ({
-  Icon,
-  text,
-  active,
-  alert,
-}: SidebarItemProps) => {
+const SidebarItem = ({ Icon, text, active, alert }: SidebarItemProps) => {
   const { expanded } = useContext(SidebarContext);
   // console.log("[SidebarItem] expanded:", expanded);
   return (

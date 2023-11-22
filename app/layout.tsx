@@ -1,18 +1,8 @@
 import type { Metadata } from "next";
-import { Catamaran, Roboto_Mono } from "next/font/google";
+import { catamaran, robotoMono } from "@/app/fonts";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-const catamaran = Catamaran({
-  subsets: ["latin"],
-  variable: "--font-catamaran",
-});
-
-const robotoMono = Roboto_Mono({
-  subsets: ["latin"],
-  variable: "--font-roboto-mono",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -28,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${catamaran.variable}`}>
+    <html lang="en" className={`${catamaran.variable} ${robotoMono.variable}`}>
       <body className="bg-slate-50 flex flex-col h-screen">
         <header>
           <Header />
