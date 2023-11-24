@@ -1,6 +1,8 @@
 import { LucideIcon } from "lucide-react";
 import { useContext } from "react";
 import { SidebarContext } from "./Sidebar";
+import Link from "next/link";
+import NavLink from "@/components/NavLink";
 
 type SidebarItemProps = {
   Icon: LucideIcon;
@@ -21,14 +23,16 @@ const SidebarItem = ({ Icon, text, active, alert }: SidebarItemProps) => {
           : "hover:bg-indigo-50 text-gray-600"
       } `}
     >
-      <Icon size={20} />
-      <span
-        className={`overflow-hidden transition-all ${
-          expanded ? "w-52 ml-3" : "w-0"
-        }`}
-      >
-        {text}
-      </span>
+      <Link href={`/service/${text.toLowerCase()}`} className={`flex`}>
+        <Icon size={20} />
+        <span
+          className={`overflow-hidden transition-all ${
+            expanded ? "w-52 ml-3" : "w-0"
+          }`}
+        >
+          {text}
+        </span>
+      </Link>
       {alert && (
         <div
           className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${

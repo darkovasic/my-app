@@ -12,7 +12,7 @@ function NavLink({ label, path }: NavLinkProps) {
   const activeSegment = useSelectedLayoutSegment();
   return (
     <Link
-      href={path}
+      href={`/${path}`}
       className={`${activeSegment === path ? "text-red-400" : ""}`}
     >
       {label}

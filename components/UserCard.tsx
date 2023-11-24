@@ -18,8 +18,8 @@ function UserCard() {
   return (
     <div className="border-t flex p-3">
       <Image
-        src={session?.user?.image ?? ""}
-        alt={session?.user?.name ?? "Profile Pic"}
+        src={session.user?.image ?? ""}
+        alt={session.user?.name ?? "Profile Pic"}
         width={40}
         height={40}
         className="rounded-md"

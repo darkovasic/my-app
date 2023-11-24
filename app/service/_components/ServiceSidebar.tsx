@@ -2,6 +2,7 @@
 
 import Sidebar from "@/components/Sidebar";
 import SidebarItem from "@/components/SidebarItem";
+import { useSelectedLayoutSegment } from "next/navigation";
 import {
   LifeBuoy,
   Receipt,
@@ -14,11 +15,17 @@ import {
 } from "lucide-react";
 
 function ServiceSidebar() {
+  const activeSegment = useSelectedLayoutSegment();
+  console.log("[ServiceSidebar] activeSegment:", activeSegment);
   return (
     <Sidebar>
       <SidebarItem Icon={LayoutDashboard} text={"Dashboard"} alert />
-      <SidebarItem Icon={BarChart3} text={"Statistics"} active />
-      <SidebarItem Icon={UserCircle} text={"Users"} />
+      <SidebarItem Icon={BarChart3} text={"Statistics"} />
+      <SidebarItem
+        Icon={UserCircle}
+        text={"Users"}
+        active={activeSegment === "users"}
+      />
       <SidebarItem Icon={Boxes} text={"Inventory"} />
       <SidebarItem Icon={Package} text={"Orders"} alert />
       <SidebarItem Icon={Receipt} text={"Billings"} />

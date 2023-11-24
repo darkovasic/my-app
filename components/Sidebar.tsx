@@ -19,6 +19,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
             }`}
             width={160}
             height={46}
+            priority
           />
           <button
             onClick={() => setExpanded((curr) => !curr)}
