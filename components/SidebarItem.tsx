@@ -23,7 +23,12 @@ const SidebarItem = ({ Icon, text, active, alert }: SidebarItemProps) => {
           : "hover:bg-indigo-50 text-gray-600"
       } `}
     >
-      <Link href={`/service/${text.toLowerCase()}`} className={`flex`}>
+      <Link
+        href={
+          text === "Users" ? `/service/${text.toLowerCase()}` : "/service/#"
+        }
+        className={`flex`}
+      >
         <Icon size={20} />
         <span
           className={`overflow-hidden transition-all ${
