@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 function UserCard() {
   const { expanded } = useContext(SidebarContext);
   const { data: session } = useSession();
-  console.log("[UserCard] session", session);
+  // console.log("[UserCard] session", session);
   if (!session) {
     return (
       <div className="border-t flex justify-center items-center h-[65px]">

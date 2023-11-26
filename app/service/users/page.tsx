@@ -1,11 +1,6 @@
 import CrudHeader from "@/components/crud/CrudHeader";
 
 const UsersPage = () => {
-  // Add items to database
-  const addItem = async (e: Event) => {
-    e.preventDefault();
-  };
-
   // Read items from database
 
   // Delete items from database
