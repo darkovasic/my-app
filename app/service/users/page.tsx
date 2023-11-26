@@ -1,5 +1,4 @@
 import CrudHeader from "@/components/crud/CrudHeader";
-import CreateModal from "@/components/crud/modals/CreateModal";
 
 const UsersPage = () => {
   // Add items to database
