@@ -30,7 +30,7 @@ function ActionsDropdownButton() {
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-95 opacity-0"
       >
-        <Menu.Items className="origin-top left-1/2 transform -translate-x-1/2 absolute bg-white py-1 text-sm text-gray-700 dark:text-gray-200 z-10 w-40 rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 block">
+        <Menu.Items className="origin-top left-1/2 transform -translate-x-1/2 absolute mt-2 bg-white py-1 text-sm text-gray-700 dark:text-gray-200 z-10 w-40 rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 block">
           <Menu.Item>
             {({ active }) => (
               <a

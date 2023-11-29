@@ -1,24 +1,50 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { db } from "@/app/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  getDoc,
+  serverTimestamp,
+  Timestamp,
+} from "firebase/firestore";
 
 type FormState = {
   message: string;
 };
 
+type User = {
+  id: string;
+  role?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
+};
+
 export async function createUser(prevState: FormState, formData: FormData) {
-  console.log("[createUser] formData", formData);
   try {
     const docRef = await addDoc(collection(db, "users"), {
       firstName: formData.get("firstName"),
       lastName: formData.get("lastName"),
       email: formData.get("email"),
+      role: formData.get("role"),
+      createdAt: serverTimestamp(),
     });
-    console.log("Document written with ID: ", docRef.id);
+    revalidatePath("/service/users");
     return { message: "User is created." };
   } catch (e) {
-    console.error("Error adding document: ", e);
-    return { message: "Error adding document." };
+    return { message: "Error adding user." };
   }
+}
+
+export async function getUsers(): Promise<User[]> {
+  const querySnapshot = await getDocs(collection(db, "users"));
+  const users: User[] = querySnapshot.docs.map((doc) => {
+    return { id: doc.id, ...doc.data() };
+  });
+  return users;
 }

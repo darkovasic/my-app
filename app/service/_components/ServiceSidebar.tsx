@@ -16,7 +16,6 @@ import {
 
 function ServiceSidebar() {
   const activeSegment = useSelectedLayoutSegment();
-  console.log("[ServiceSidebar] activeSegment:", activeSegment);
   return (
     <Sidebar>
       <SidebarItem Icon={LayoutDashboard} text={"Dashboard"} alert />
