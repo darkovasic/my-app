@@ -1,33 +1,40 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { db } from "@/app/firebase";
 import {
+  doc,
   collection,
   addDoc,
   getDocs,
   getDoc,
+  deleteDoc,
   serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
+import { revalidatePath } from "next/cache";
 
 type FormState = {
   message: string;
 };
 
 type User = {
-  id: string;
   role?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
-  createdAt?: Timestamp;
-  updatedAt?: Timestamp;
+  createdAt?: Timestamp | string;
+  updatedAt?: Timestamp | string;
 };
 
-export async function createUser(prevState: FormState, formData: FormData) {
+export type FullUser = User & {
+  id: string;
+};
+
+const schema = "users";
+
+export async function createUser(_prevState: FormState, formData: FormData) {
   try {
-    const docRef = await addDoc(collection(db, "users"), {
+    const docRef = await addDoc(collection(db, schema), {
       firstName: formData.get("firstName"),
       lastName: formData.get("lastName"),
       email: formData.get("email"),
@@ -41,10 +48,28 @@ export async function createUser(prevState: FormState, formData: FormData) {
   }
 }
 
-export async function getUsers(): Promise<User[]> {
-  const querySnapshot = await getDocs(collection(db, "users"));
-  const users: User[] = querySnapshot.docs.map((doc) => {
-    return { id: doc.id, ...doc.data() };
+export async function getUsers(): Promise<FullUser[]> {
+  const querySnapshot = await getDocs(collection(db, schema));
+  const users: FullUser[] = querySnapshot.docs.map((doc) => {
+    const data: User = doc.data();
+    console.log("[getUsers] data", data);
+    return { id: doc.id, ...toUser(data) };
   });
   return users;
+}
+
+export async function deleteUser(id: string) {
+  await deleteDoc(doc(db, schema, id));
+  revalidatePath("/service/users");
+  return { message: "User is deleted." };
+}
+
+function toUser(data: User) {
+  return {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    email: data.email,
+    role: data.role,
+    createdAt: (data.createdAt as Timestamp)?.toDate().toLocaleString(),
+  };
 }

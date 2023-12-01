@@ -47,15 +47,15 @@ const UsersPage = async () => {
                       <td className="px-4 py-3">{user?.email}</td>
                       <td className="px-4 py-3">{user?.role}</td>
                       <td className="px-4 py-3">
-                        {user?.createdAt?.toDate().toLocaleString()}
+                        {user?.createdAt?.toString()}
                       </td>
                       <td className="px-4 py-3">
-                        {user?.updatedAt?.toDate().toLocaleString()}
+                        {user?.updatedAt?.toString()}
                       </td>
                       {/* <td className="px-4 py-3">{user?.createdAt}</td>
                       <td className="px-4 py-3">{user?.updatedAt}</td> */}
                       <td className="px-4 py-3 flex items-center justify-end">
-                        <UserDropdownMenu />
+                        <UserDropdownMenu user={user} />
                       </td>
                     </tr>
                   );

@@ -1,9 +1,15 @@
 "use client";
 
 import { Menu, Transition } from "@headlessui/react";
-import Image from "next/image";
+import { deleteUser, FullUser } from "../actions";
+import { MouseEvent } from "react";
 
-function UserDropdownMenu() {
+const handleDeleteClick = (id: string) => async () => {
+  await deleteUser(id);
+  return;
+};
+
+function UserDropdownMenu({ user }: { user: FullUser }) {
   return (
     <Menu as="div" className={`relative inline-block`}>
       <Menu.Button className="inline-flex items-center text-sm font-medium z-0 hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100">
@@ -87,6 +93,7 @@ function UserDropdownMenu() {
               data-modal-target="deleteModal"
               data-modal-toggle="deleteModal"
               className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400"
+              onClick={handleDeleteClick(user.id)}
             >
               <svg
                 className="w-4 h-4 mr-2"
