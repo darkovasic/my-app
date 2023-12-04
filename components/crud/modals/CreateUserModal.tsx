@@ -1,43 +1,30 @@
 "use client";
 
+import { createContext } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import { createUser } from "@/app/service/users/actions";
+import UserForm from "@/app/service/users/_components/UserForm";
 
 const initialState = {
   message: "",
+  // firstName: "",
 };
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  console.log("[SubmitButton] pending:", pending);
+type UserFormContext = {
+  formAction: (formData: FormData) => void;
+  pending: boolean;
+};
 
-  return (
-    <button
-      type="submit"
-      className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      aria-disabled={pending}
-      disabled={pending}
-    >
-      <svg
-        className="mr-1 -ml-1 w-6 h-6"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fillRule="evenodd"
-          d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-          clipRule="evenodd"
-        />
-      </svg>
-      Submit
-    </button>
-  );
-}
+export const UserFormContext = createContext<UserFormContext>({
+  formAction: () => {},
+  pending: false,
+});
 
 function CreateUserModal() {
   const [state, formAction] = useFormState(createUser, initialState);
+  const { pending } = useFormStatus();
+  console.log("[CreateUserModal] state: ", state);
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -99,132 +86,9 @@ function CreateUserModal() {
               </Dialog.Close>
             </div>
             {/* <!-- Modal body --> */}
-            <form action={formAction}>
-              <div className="grid gap-4 mb-4 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="firstName"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    id="firstName"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                    focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 
-                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=""
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="lastName"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    id="lastName"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                    focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 
-                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                    dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=""
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="price"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                    focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 
-                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=""
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="role"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Role
-                  </label>
-                  <select
-                    id="role"
-                    name="role"
-                    defaultValue="user"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  >
-                    <option>Select role</option>
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                  </select>
-                </div>
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=""
-                    // required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="brand"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Repeat Password
-                  </label>
-                  <input
-                    type="password"
-                    name="repeat_password"
-                    id="repeat_password"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=""
-                    // required
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="description"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Description
-                  </label>
-                  <textarea
-                    id="description"
-                    rows={4}
-                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Write user description here"
-                  ></textarea>
-                </div>
-              </div>
-              <SubmitButton />
-            </form>
+            <UserFormContext.Provider value={{ formAction, pending }}>
+              <UserForm />
+            </UserFormContext.Provider>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
