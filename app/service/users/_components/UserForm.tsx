@@ -1,13 +1,16 @@
-import { useContext } from "react";
 import SubmitButton from "./SubmitButton";
-import { UserFormContext } from "@/components/crud/modals/CreateUserModal";
+import { useUserContext } from "../context";
+import { useFormState } from "../hooks";
+import type { ActionFunction } from "../context";
 
-function UserForm() {
-  const { formAction } = useContext(UserFormContext);
+function UserForm({ action }: { action: ActionFunction }) {
+  const [state, handleSubmit] = useFormState(action);
+  const { user } = useUserContext();
   return (
-    <form action={formAction}>
+    <form onSubmit={handleSubmit}>
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
         <div>
+          <input type="hidden" name="id" value={user.id} />
           <label
             htmlFor="firstName"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -18,6 +21,7 @@ function UserForm() {
             type="text"
             name="firstName"
             id="firstName"
+            defaultValue={user.firstName}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                 focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 
                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
@@ -37,6 +41,7 @@ function UserForm() {
             type="text"
             name="lastName"
             id="lastName"
+            defaultValue={user.lastName}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                 focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 
                 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
@@ -56,6 +61,7 @@ function UserForm() {
             type="email"
             name="email"
             id="email"
+            defaultValue={user.email}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                 focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 
                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
@@ -74,7 +80,7 @@ function UserForm() {
           <select
             id="role"
             name="role"
-            defaultValue="user"
+            defaultValue={user.role || "users"}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option>Select role</option>
@@ -129,7 +135,7 @@ function UserForm() {
           ></textarea>
         </div>
       </div>
-      <SubmitButton />
+      <SubmitButton loading={state.loading} />
     </form>
   );
 }

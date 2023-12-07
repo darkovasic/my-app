@@ -1,8 +1,19 @@
 "use client";
 
+// import { createContext } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { deleteUser, FullUser } from "../actions";
-import { MouseEvent } from "react";
+import { deleteUser, updateUser } from "../actions";
+import UpdateUserModal from "@/components/crud/modals/UpdateUserModal";
+import UserContext from "@/app/service/users/context";
+import type { FullUser } from "@/app/service/users/context";
+
+// type UserContextType = {
+//   user: FullUser;
+// };
+
+// export const UserContext = createContext<UserContextType | undefined>(
+//   undefined
+// );
 
 const handleDeleteClick = (id: string) => async () => {
   await deleteUser(id);
@@ -34,34 +45,9 @@ function UserDropdownMenu({ user }: { user: FullUser }) {
       >
         <Menu.Items className="origin-top-right right-0 fixed mt-2 bg-white py-1 text-sm text-gray-700 dark:text-gray-200 z-10 w-40 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
           <Menu.Item>
-            <button
-              type="button"
-              className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200"
-            >
-              {/* <Image
-                src="/public/apple-iphone-14-dropdown-button.svg"
-                alt="User actions"
-                className="dark:invert"
-                width={20}
-                height={20}
-                priority
-              /> */}
-              <svg
-                className="w-4 h-4 mr-2"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                />
-              </svg>
-              Edit
-            </button>
+            <UserContext.Provider value={{ user }}>
+              <UpdateUserModal />
+            </UserContext.Provider>
           </Menu.Item>
           <Menu.Item>
             <button

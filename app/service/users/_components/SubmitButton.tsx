@@ -1,15 +1,10 @@
-import { useContext } from "react";
-import { UserFormContext } from "@/components/crud/modals/CreateUserModal";
-
-function SubmitButton() {
-  const { pending } = useContext(UserFormContext);
-  console.log("[SubmitButton] pending:", pending);
+function SubmitButton({ loading }: { loading: boolean }) {
   return (
     <button
       type="submit"
       className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      aria-disabled={pending}
-      disabled={pending}
+      aria-disabled={loading}
+      disabled={loading}
     >
       <svg
         className="mr-1 -ml-1 w-6 h-6"

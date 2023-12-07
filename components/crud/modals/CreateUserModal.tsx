@@ -1,39 +1,21 @@
 "use client";
 
-import { createContext } from "react";
-import { useFormState, useFormStatus } from "react-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import { createUser } from "@/app/service/users/actions";
 import UserForm from "@/app/service/users/_components/UserForm";
-
-const initialState = {
-  message: "",
-  // firstName: "",
-};
-
-type UserFormContext = {
-  formAction: (formData: FormData) => void;
-  pending: boolean;
-};
-
-export const UserFormContext = createContext<UserFormContext>({
-  formAction: () => {},
-  pending: false,
-});
+import UserContext from "@/app/service/users/context";
 
 function CreateUserModal() {
-  const [state, formAction] = useFormState(createUser, initialState);
-  const { pending } = useFormStatus();
-  console.log("[CreateUserModal] state: ", state);
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <button
           type="button"
           id="createProductModalButton"
-          data-modal-target="createProductModal"
-          data-modal-toggle="createProductModal"
-          className="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          className="flex items-center justify-center text-white bg-blue-700 
+              hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium 
+              rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 
+              focus:outline-none dark:focus:ring-blue-800"
         >
           <svg
             className="h-3.5 w-3.5 mr-2"
@@ -53,7 +35,10 @@ function CreateUserModal() {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-black/30 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white rounded-lg focus:outline-none">
+        <Dialog.Content
+          className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] 
+                            translate-x-[-50%] translate-y-[-50%] bg-white rounded-lg focus:outline-none"
+        >
           {/* <!-- Modal content --> */}
           <div className="relative p-4 shadow dark:bg-gray-800 sm:p-5">
             {/* <!-- Modal header --> */}
@@ -64,7 +49,8 @@ function CreateUserModal() {
               <Dialog.Close asChild>
                 <button
                   type="button"
-                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 
+                      rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                   data-modal-target="createProductModal"
                   data-modal-toggle="createProductModal"
                 >
@@ -86,9 +72,11 @@ function CreateUserModal() {
               </Dialog.Close>
             </div>
             {/* <!-- Modal body --> */}
-            <UserFormContext.Provider value={{ formAction, pending }}>
-              <UserForm />
-            </UserFormContext.Provider>
+            <UserContext.Provider value={{ user: { id: "" } }}>
+              {/* <UserFormContext.Provider value={{ createUser }}> */}
+              <UserForm action={createUser} />
+              {/* </UserFormContext.Provider> */}
+            </UserContext.Provider>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
