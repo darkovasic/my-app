@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Transition } from "@headlessui/react";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import UpdateUserModal from "@/components/crud/modals/UpdateUserModal";
 import DeleteUserModal from "@/components/crud/modals/DeleteUserModal";
 import UserContext from "@/app/service/users/context";
@@ -8,39 +8,44 @@ import type { FullUser } from "@/app/service/users/context";
 
 function UserDropdownMenu({ user }: { user: FullUser }) {
   return (
-    <Menu as="div" className={`relative inline-block`}>
-      <Menu.Button className="inline-flex items-center text-sm font-medium z-0 hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100">
-        <svg
-          className="w-5 h-5"
-          aria-hidden="true"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <button
+          className="inline-flex items-center text-sm font-medium 
+          hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 
+          text-center text-gray-500 hover:text-gray-800 rounded-lg 
+          focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
         >
-          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-        </svg>
-      </Menu.Button>
+          <svg
+            className="w-5 h-5"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+          </svg>
+        </button>
+      </DropdownMenu.Trigger>
 
-      <Transition
-        enter="transition duration-100 ease-out"
-        enterFrom="transform scale-95 opacity-0"
-        enterTo="transform scale-100 opacity-100"
-        leave="transition duration-75 ease-out"
-        leaveFrom="transform scale-100 opacity-100"
-        leaveTo="transform scale-95 opacity-0"
-      >
-        <Menu.Items className="origin-top-right right-0 fixed mt-2 bg-white py-1 text-sm text-gray-700 dark:text-gray-200 z-10 w-40 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
-          <Menu.Item>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          className="min-w-[150px] bg-white text-sm text-gray-700 dark:text-gray-200 
+                    rounded-md py-1 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] 
+                    will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade 
+                    data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+          sideOffset={5}
+        >
+          <DropdownMenu.Item asChild>
             <UserContext.Provider value={{ user }}>
               <UpdateUserModal />
             </UserContext.Provider>
-          </Menu.Item>
-          <Menu.Item>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item>
             <button
               type="button"
-              data-modal-target="readProductModal"
-              data-modal-toggle="readProductModal"
-              className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200"
+              className="flex w-full items-center py-2 px-4 hover:bg-gray-100 
+                  dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200"
             >
               <svg
                 className="w-4 h-4 mr-2"
@@ -58,15 +63,15 @@ function UserDropdownMenu({ user }: { user: FullUser }) {
               </svg>
               Preview
             </button>
-          </Menu.Item>
-          <Menu.Item>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item asChild>
             <UserContext.Provider value={{ user }}>
               <DeleteUserModal />
             </UserContext.Provider>
-          </Menu.Item>
-        </Menu.Items>
-      </Transition>
-    </Menu>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   );
 }
 
