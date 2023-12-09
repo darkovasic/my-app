@@ -27,6 +27,7 @@ export type User = {
   firstName?: string;
   lastName?: string;
   email?: string;
+  description?: string;
   createdAt?: Timestamp | string;
   updatedAt?: Timestamp | string;
 };

@@ -26,6 +26,7 @@ export async function createUser(
       lastName: formData.get("lastName"),
       email: formData.get("email"),
       role: formData.get("role"),
+      description: formData.get("description"),
       createdAt: serverTimestamp(),
     });
     revalidatePath("/service/users");
@@ -72,6 +73,7 @@ export async function updateUser(formData: FormData) {
       lastName: formData.get("lastName"),
       email: formData.get("email"),
       role: formData.get("role"),
+      description: formData.get("description"),
       updatedAt: serverTimestamp(),
     });
     revalidatePath("/service/users");
@@ -87,6 +89,7 @@ function toUser(data: User) {
     lastName: data.lastName,
     email: data.email,
     role: data.role,
+    description: data.description,
     createdAt: (data.createdAt as Timestamp)?.toDate().toLocaleString(),
     updatedAt: (data.updatedAt as Timestamp)?.toDate().toLocaleString(),
   };
