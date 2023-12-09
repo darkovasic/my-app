@@ -1,13 +1,18 @@
 import { deleteUser } from "@/app/service/users/actions";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useUserContext } from "@/app/service/users/context";
+import { forwardRef } from "react";
+import type { ForwardedRef } from "react";
 
 const handleDeleteClick = (id: string) => async (): Promise<void> => {
   await deleteUser(id);
   return;
 };
 
-function DeleteUserModal() {
+const DeleteUserModal = forwardRef(function DeleteUserModal(
+  _props: any,
+  ref: ForwardedRef<any>
+) {
   const { user } = useUserContext();
   return (
     <Dialog.Root>
@@ -115,6 +120,6 @@ function DeleteUserModal() {
       </Dialog.Portal>
     </Dialog.Root>
   );
-}
+});
 
 export default DeleteUserModal;

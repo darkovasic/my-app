@@ -3,8 +3,13 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { getUser, updateUser } from "@/app/service/users/actions";
 import UserForm from "@/app/service/users/_components/UserForm";
+import { forwardRef } from "react";
+import type { ForwardedRef } from "react";
 
-function UpdateUserModal() {
+const UpdateUserModal = forwardRef(function UpdateUserModal(
+  _props: any,
+  ref: ForwardedRef<any>
+) {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -78,6 +83,6 @@ function UpdateUserModal() {
       </Dialog.Portal>
     </Dialog.Root>
   );
-}
+});
 
 export default UpdateUserModal;

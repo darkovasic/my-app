@@ -74,6 +74,7 @@ export async function updateUser(formData: FormData) {
       role: formData.get("role"),
       updatedAt: serverTimestamp(),
     });
+    revalidatePath("/service/users");
     return { isError: false, message: "User updated successfully." };
   } else {
     return { isError: true, message: "User ID unknown." };
@@ -87,5 +88,6 @@ function toUser(data: User) {
     email: data.email,
     role: data.role,
     createdAt: (data.createdAt as Timestamp)?.toDate().toLocaleString(),
+    updatedAt: (data.updatedAt as Timestamp)?.toDate().toLocaleString(),
   };
 }
