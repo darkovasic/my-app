@@ -73,9 +73,7 @@ function CreateUserModal() {
             </div>
             {/* <!-- Modal body --> */}
             <UserContext.Provider value={{ user: { id: "" } }}>
-              {/* <UserFormContext.Provider value={{ createUser }}> */}
               <UserForm action={createUser} />
-              {/* </UserFormContext.Provider> */}
             </UserContext.Provider>
           </div>
         </Dialog.Content>

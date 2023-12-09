@@ -1,11 +1,9 @@
 import CrudHeader from "@/components/crud/CrudHeader";
 import UserDropdownMenu from "./_components/UserDropdownMenu";
 import { getUsers } from "./actions";
-import type { FullUser } from "./context";
 
 const UsersPage = async () => {
   const users = await getUsers();
-  // console.log("[UsersPage] users:", users);
   return (
     <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased w-full">
       <div className="mx-auto max-w-screen-xl h-full px-4 lg:px-12">
@@ -53,8 +51,6 @@ const UsersPage = async () => {
                       <td className="px-4 py-3">
                         {user?.updatedAt?.toString()}
                       </td>
-                      {/* <td className="px-4 py-3">{user?.createdAt}</td>
-                      <td className="px-4 py-3">{user?.updatedAt}</td> */}
                       <td className="px-4 py-3 flex items-center justify-end">
                         <UserDropdownMenu user={user} />
                       </td>
