@@ -2,6 +2,7 @@ import SubmitButton from "./SubmitButton";
 import { useUserContext } from "../context";
 import { useFormState } from "../hooks";
 import type { ActionFunction } from "../context";
+import Input from "@/components/Input";
 
 function UserForm({ action }: { action: ActionFunction }) {
   const [state, handleSubmit] = useFormState(action);
@@ -9,68 +10,28 @@ function UserForm({ action }: { action: ActionFunction }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
-        <div>
-          <input type="hidden" name="id" value={user.id} />
-          <label
-            htmlFor="firstName"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            First Name
-          </label>
-          <input
-            type="text"
-            name="firstName"
-            id="firstName"
-            defaultValue={user.firstName}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 
-                dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder=""
-            required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="lastName"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Last Name
-          </label>
-          <input
-            type="text"
-            name="lastName"
-            id="lastName"
-            defaultValue={user.lastName}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 
-                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder=""
-            required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            autoComplete="email"
-            defaultValue={user.email}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 
-                dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder=""
-            required
-          />
-        </div>
+        <input type="hidden" name="id" value={user.id} />
+        <Input
+          id={`firstName`}
+          label={`First Name`}
+          type={`text`}
+          defaultValue={user.firstName}
+          required
+        />
+        <Input
+          id={`lastName`}
+          label={`Last Name`}
+          type={`text`}
+          defaultValue={user.lastName}
+          required
+        />
+        <Input
+          id={`email`}
+          label={`Email`}
+          type={`email`}
+          defaultValue={user.email}
+          required
+        />
         <div>
           <label
             htmlFor="role"
@@ -81,7 +42,7 @@ function UserForm({ action }: { action: ActionFunction }) {
           <select
             id="role"
             name="role"
-            defaultValue={user.role || "users"}
+            defaultValue={user.role ?? "users"}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option>Select role</option>
@@ -89,38 +50,18 @@ function UserForm({ action }: { action: ActionFunction }) {
             <option value="user">User</option>
           </select>
         </div>
-        <div>
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder=""
-            // required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="repeatPassword"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Repeat Password
-          </label>
-          <input
-            type="password"
-            name="repeatPassword"
-            id="repeatPassword"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder=""
-            // required
-          />
-        </div>
+        <Input
+          id={`password`}
+          label={`Password`}
+          type={`password`}
+          // required
+        />
+        <Input
+          id={`repeatPassword`}
+          label={`Repeat Password`}
+          type={`password`}
+          // required
+        />
         <div className="sm:col-span-2">
           <label
             htmlFor="description"
