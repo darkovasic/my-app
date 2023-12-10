@@ -5,6 +5,7 @@ function Input({
   defaultValue,
   label,
   required,
+  autoComplete,
 }: {
   id: string;
   type: string;
@@ -12,6 +13,7 @@ function Input({
   defaultValue?: string;
   label?: string;
   required?: boolean;
+  autoComplete?: string;
 }) {
   return (
     <div>
