@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { createUser } from "@/app/service/users/actions";
 import UserForm from "@/app/service/users/_components/UserForm";
 import UserContext from "@/app/service/users/context";
+import { Plus } from "lucide-react";
 
 function CreateUserModal() {
   return (
@@ -17,19 +18,7 @@ function CreateUserModal() {
               rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 
               focus:outline-none dark:focus:ring-blue-800"
         >
-          <svg
-            className="h-3.5 w-3.5 mr-2"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              clipRule="evenodd"
-              fillRule="evenodd"
-              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-            />
-          </svg>
+          <Plus strokeWidth={3} className="h-3.5 w-3.5 mr-2" />
           Add User
         </button>
       </Dialog.Trigger>
@@ -51,8 +40,6 @@ function CreateUserModal() {
                   type="button"
                   className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 
                       rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-target="createProductModal"
-                  data-modal-toggle="createProductModal"
                 >
                   <svg
                     aria-hidden="true"
