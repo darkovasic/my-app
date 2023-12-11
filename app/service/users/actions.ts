@@ -11,6 +11,8 @@ import {
   deleteDoc,
   serverTimestamp,
   Timestamp,
+  orderBy,
+  query as firestoreQuery,
 } from "firebase/firestore";
 import { revalidatePath } from "next/cache";
 import type { User, FullUser, ActionError } from "./context";
@@ -37,10 +39,13 @@ export async function createUser(
 }
 
 export async function getUsers(): Promise<FullUser[]> {
-  const querySnapshot = await getDocs(collection(db, schema));
+  const query = firestoreQuery(
+    collection(db, schema),
+    orderBy("createdAt", "desc")
+  );
+  const querySnapshot = await getDocs(query);
   const users: FullUser[] = querySnapshot.docs.map((doc) => {
     const data: User = doc.data();
-    // console.log("[getUsers] data", data);
     return { id: doc.id, ...toUser(data) };
   });
   return users;
