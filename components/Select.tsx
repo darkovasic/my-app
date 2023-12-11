@@ -54,7 +54,11 @@ function Select({
           >
             <RadixSelect.Viewport className="p-[5px]">
               {options.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className="py-3.5 hover:bg-gray-100"
+                >
                   {option.label}
                 </SelectItem>
               ))}
