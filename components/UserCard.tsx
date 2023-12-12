@@ -11,7 +11,13 @@ function UserCard() {
   if (!session) {
     return (
       <div className="border-t flex justify-center items-center h-[65px]">
-        Loading user data...
+        <span
+          className={`overflow-hidden transition-all whitespace-nowrap ${
+            expanded ? "w-52 ml-3" : "w-0"
+          }`}
+        >
+          Loading user data...
+        </span>
       </div>
     );
   }
