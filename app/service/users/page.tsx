@@ -5,7 +5,7 @@ import { getFirstUsers, getNextUsers } from "./actions";
 import type { Metadata } from "next";
 
 type UsersPageProps = {
-  searchParams: { page?: string };
+  searchParams: { page?: string; query?: string };
 };
 
 export const metadata: Metadata = {
@@ -13,8 +13,11 @@ export const metadata: Metadata = {
 };
 
 const UsersPage = async ({ searchParams }: UsersPageProps) => {
-  const { users, totalPages, lastVisible } = await getFirstUsers();
   const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
+
+  const { users, totalPages, lastVisible } = await getFirstUsers();
+
+  console.log("[UsersPage], currentPage", currentPage);
 
   // async function nextPageHandler() {
   //   "use server";

@@ -1,7 +1,7 @@
 "use client";
 
 import Input from "@/components/Input";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 function Search() {
   return (
