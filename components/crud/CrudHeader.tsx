@@ -1,35 +1,12 @@
 import ActionsDropdownButton from "@/app/service/users/_components/ActionsDropdownButton";
 import CreateUserModal from "@/components/crud/modals/CreateUserModal";
-import {
-  MagnifyingGlassIcon,
-  ChevronDownIcon,
-  FunnelIcon,
-} from "@heroicons/react/20/solid";
-import Input from "../Input";
+import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
 
 function CrudHeader() {
   return (
     <div>
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-        <div className="w-full md:w-1/2">
-          <form className="flex items-center">
-            <label htmlFor="simple-search" className="sr-only">
-              Search
-            </label>
-            <div className="relative w-full">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-              </div>
-              <Input
-                type="text"
-                id="simple-search"
-                className="pl-10"
-                placeholder="Search"
-                required
-              />
-            </div>
-          </form>
-        </div>
+        <div className="w-full md:w-1/2"></div>
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <CreateUserModal />
           <div className="flex items-center space-x-3 w-full md:w-auto">
