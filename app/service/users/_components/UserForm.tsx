@@ -4,6 +4,7 @@ import type { ActionFunction } from "../context";
 import { useUserContext } from "../context";
 import { useFormState } from "../hooks";
 import SubmitButton from "./SubmitButton";
+import { roleOptions } from "@/app/service/users/context";
 
 function UserForm({ action }: { action: ActionFunction }) {
   const [state, handleSubmit] = useFormState(action);
@@ -38,6 +39,7 @@ function UserForm({ action }: { action: ActionFunction }) {
           label="Role"
           placeholder="Select role..."
           defaultValue={user.role ?? "user"}
+          options={roleOptions}
         />
         <Input
           id={`password`}

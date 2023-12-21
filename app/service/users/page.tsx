@@ -79,26 +79,12 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
                 })}
               </tbody>
             </table>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              // nextPageHandler={nextPageHandler}
-            />
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
           </div>
         </div>
       </div>
     </section>
   );
 };
-
-function parsePageParam(pageCount: number, paramValue?: string): number {
-  if (paramValue) {
-    const page = parseInt(paramValue);
-    if (isFinite(page) && page > 0 && page <= pageCount) {
-      return page;
-    }
-  }
-  return 1;
-}
 
 export default UsersPage;

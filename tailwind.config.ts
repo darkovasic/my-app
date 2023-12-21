@@ -1,4 +1,5 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
+import { blackA, mauve, violet } from "@radix-ui/colors";
 
 const config: Config = {
   content: ["./app/**/*.{ts,tsx,mdx}", "./components/**/*.{ts,tsx,mdx}"],
@@ -7,6 +8,11 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-catamaran)"],
         mono: ["var(--font-roboto-mono)"],
+      },
+      colors: {
+        ...blackA,
+        ...mauve,
+        ...violet,
       },
       keyframes: {
         overlayShow: {
@@ -52,4 +58,4 @@ const config: Config = {
   },
   plugins: [],
 };
-export default config
+export default config;

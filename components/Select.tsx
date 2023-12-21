@@ -8,21 +8,23 @@ import classnames from "classnames";
 import { forwardRef } from "react";
 import type { ForwardedRef } from "react";
 
-const options = [
-  { value: "admin", label: "Admin" },
-  { value: "user", label: "User" },
-];
+type SelectOptions = {
+  value: string;
+  label: string;
+};
 
 function Select({
   id,
   label,
   defaultValue,
   placeholder,
+  options,
 }: {
   id: string;
   label: string;
   defaultValue: string;
   placeholder: string;
+  options: SelectOptions[];
 }) {
   return (
     <div>

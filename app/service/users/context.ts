@@ -46,6 +46,12 @@ export type FullUser = User & {
   id: string;
 };
 
+export const roleOptions = [
+  { value: "admin", label: "Admin" },
+  { value: "user", label: "User" },
+  { value: "guest", label: "Guest" },
+];
+
 type UserContextType = {
   user: FullUser;
 };
