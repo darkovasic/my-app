@@ -10,27 +10,46 @@ import {
   updateDoc,
   deleteDoc,
   serverTimestamp,
-  Timestamp,
   orderBy,
   query as firestoreQuery,
+  startAt,
+  limit,
+  getCountFromServer,
 } from "firebase/firestore";
+// import { cache } from "react";
 import { revalidatePath } from "next/cache";
-import type { User, FullUser, ActionError } from "./context";
+import type { User, FullUser, ActionError, UserRaw } from "./context";
+import type {
+  Query,
+  Timestamp,
+  QueryDocumentSnapshot,
+} from "firebase/firestore";
 
 const schema = "users";
+const coll = collection(db, schema);
+
+function prepareData(formData: FormData, isUpdate: boolean) {
+  const user: UserRaw = {
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    email: formData.get("email"),
+    role: formData.get("role"),
+    description: formData.get("description"),
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  };
+  isUpdate ? delete user.createdAt : delete user.updatedAt;
+  return user;
+}
 
 export async function createUser(
   formData: FormData
 ): Promise<ActionError | undefined> {
   try {
-    const docRef = await addDoc(collection(db, schema), {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      email: formData.get("email"),
-      role: formData.get("role"),
-      description: formData.get("description"),
-      createdAt: serverTimestamp(),
-    });
+    const docRef = await addDoc(
+      collection(db, schema),
+      prepareData(formData, false)
+    );
     revalidatePath("/service/users");
     return { isError: false, message: "User added successfully." };
   } catch (error) {
@@ -38,18 +57,49 @@ export async function createUser(
   }
 }
 
-export async function getUsers(): Promise<FullUser[]> {
-  const query = firestoreQuery(
-    collection(db, schema),
-    orderBy("createdAt", "desc")
-  );
+const getUsersQuery = async (
+  query: Query
+): Promise<{ users: FullUser[]; lastVisible: QueryDocumentSnapshot }> => {
   const querySnapshot = await getDocs(query);
+  const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+
   const users: FullUser[] = querySnapshot.docs.map((doc) => {
     const data: User = doc.data();
-    return { id: doc.id, ...toUser(data) };
+    return { id: doc.id, ...toUserPage(data) };
   });
-  return users;
-}
+
+  return { users, lastVisible };
+};
+
+export const getFirstUsers = async (pageLimit = 10) => {
+  const count = await getCount();
+  const totalPages = Math.ceil(count / pageLimit);
+
+  const first = firestoreQuery(
+    collection(db, schema),
+    orderBy("createdAt", "desc"),
+    limit(pageLimit)
+  );
+
+  const { users, lastVisible } = await getUsersQuery(first);
+
+  return { users, totalPages, lastVisible };
+};
+
+export const getNextUsers = async (qs: QueryDocumentSnapshot) => {
+  // Construct a new query starting at this document,
+  // get the next 10 users.
+  const next = firestoreQuery(
+    collection(db, schema),
+    orderBy("createdAt", "desc"),
+    startAt(qs),
+    limit(10)
+  );
+
+  const { users, lastVisible } = await getUsersQuery(next);
+
+  return { users, lastVisible };
+};
 
 export async function deleteUser(id: string) {
   await deleteDoc(doc(db, schema, id));
@@ -72,15 +122,7 @@ export async function updateUser(formData: FormData) {
   const userId = formData.get("id")?.toString();
   if (userId) {
     const docRef = doc(db, schema, userId);
-    // console.log("[updateUser] id", id);
-    await updateDoc(docRef, {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      email: formData.get("email"),
-      role: formData.get("role"),
-      description: formData.get("description"),
-      updatedAt: serverTimestamp(),
-    });
+    await updateDoc(docRef, prepareData(formData, true));
     revalidatePath("/service/users");
     return { isError: false, message: "User updated successfully." };
   } else {
@@ -88,7 +130,7 @@ export async function updateUser(formData: FormData) {
   }
 }
 
-function toUser(data: User) {
+function toUserPage(data: User) {
   return {
     firstName: data.firstName,
     lastName: data.lastName,
@@ -98,4 +140,9 @@ function toUser(data: User) {
     createdAt: (data.createdAt as Timestamp)?.toDate().toLocaleString(),
     updatedAt: (data.updatedAt as Timestamp)?.toDate().toLocaleString(),
   };
+}
+
+async function getCount(): Promise<number> {
+  const snapshot = await getCountFromServer(coll);
+  return snapshot.data().count;
 }

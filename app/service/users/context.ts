@@ -1,6 +1,6 @@
 // UserContext.ts
 import { createContext, useContext } from "react";
-import type { Timestamp } from "firebase/firestore";
+import type { FieldValue, Timestamp } from "firebase/firestore";
 import type { FormEventHandler } from "react";
 
 export type ActionError = {
@@ -30,6 +30,16 @@ export type User = {
   description?: string;
   createdAt?: Timestamp | string;
   updatedAt?: Timestamp | string;
+};
+
+export type UserRaw = {
+  role?: FormDataEntryValue | null;
+  firstName?: FormDataEntryValue | null;
+  lastName?: FormDataEntryValue | null;
+  email?: FormDataEntryValue | null;
+  description?: FormDataEntryValue | null;
+  createdAt?: FieldValue;
+  updatedAt?: FieldValue;
 };
 
 export type FullUser = User & {

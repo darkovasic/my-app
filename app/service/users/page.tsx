@@ -1,9 +1,26 @@
 import CrudHeader from "@/components/crud/CrudHeader";
+import Pagination from "@/components/crud/Pagination";
 import UserDropdownMenu from "./_components/UserDropdownMenu";
-import { getUsers } from "./actions";
+import { getFirstUsers, getNextUsers } from "./actions";
+import type { Metadata } from "next";
 
-const UsersPage = async () => {
-  const users = await getUsers();
+type UsersPageProps = {
+  searchParams: { page?: string };
+};
+
+export const metadata: Metadata = {
+  title: "Users",
+};
+
+const UsersPage = async ({ searchParams }: UsersPageProps) => {
+  const { users, totalPages, lastVisible } = await getFirstUsers();
+  const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
+
+  // async function nextPageHandler() {
+  //   "use server";
+  //   await getNextUsers(lastVisible);
+  // }
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased w-full">
       <div className="mx-auto max-w-screen-xl h-full px-4 lg:px-12">
@@ -59,11 +76,26 @@ const UsersPage = async () => {
                 })}
               </tbody>
             </table>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              // nextPageHandler={nextPageHandler}
+            />
           </div>
         </div>
       </div>
     </section>
   );
 };
+
+function parsePageParam(pageCount: number, paramValue?: string): number {
+  if (paramValue) {
+    const page = parseInt(paramValue);
+    if (isFinite(page) && page > 0 && page <= pageCount) {
+      return page;
+    }
+  }
+  return 1;
+}
 
 export default UsersPage;
