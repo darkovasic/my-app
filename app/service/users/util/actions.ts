@@ -17,8 +17,7 @@ import {
   getCountFromServer,
   where,
 } from "firebase/firestore";
-// import { cache } from "react";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import type { User, FullUser, ActionError, UserFirebase } from "./context";
 import type {
   Query,
@@ -150,8 +149,8 @@ export async function updateUser(formData: FormData): Promise<ActionError> {
   }
 }
 
-export async function searchUsers(formData: FormData, pageLimit = 10) {
-  const term = formData.get("query");
+export async function searchUsers(term: string, pageLimit = 10) {
+  noStore();
   const query = firestoreQuery(
     usersRef,
     where("firstName", "==", term),

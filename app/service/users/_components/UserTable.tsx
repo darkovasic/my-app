@@ -1,7 +1,19 @@
 import UserDropdownMenu from "../_components/UserDropdownMenu";
+import { searchUsers } from "@/app/service/users/util/actions";
 import type { FullUser } from "../util/context";
 
-function UserTable({ users }: { users: FullUser[] }) {
+async function UserTable({
+  users,
+  query,
+  currentPage,
+}: {
+  users: FullUser[];
+  query: string;
+  currentPage: number;
+}) {
+  const filteredUsers = await searchUsers(query, currentPage);
+  const shownUsers = filteredUsers ? filteredUsers : users;
+
   return (
     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -27,7 +39,7 @@ function UserTable({ users }: { users: FullUser[] }) {
         </tr>
       </thead>
       <tbody>
-        {users.map((user) => {
+        {shownUsers.map((user) => {
           return (
             <tr key={user.id} className="border-b dark:border-gray-700">
               <th

@@ -1,10 +1,12 @@
 import CrudHeader from "@/components/crud/CrudHeader";
 import Pagination from "@/components/crud/Pagination";
 import UserTable from "./_components/UserTable";
-import { getFirstUsers, getNextUsers } from "./actions";
+import UserTableSkeleton from "./_components/UserTableSkeleton";
+import { getFirstUsers, getNextUsers } from "./util/actions";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
-type UsersPageProps = {
+type ParamsProps = {
   searchParams: { page?: string; query?: string };
 };
 
@@ -12,8 +14,9 @@ export const metadata: Metadata = {
   title: "Users",
 };
 
-const UsersPage = async ({ searchParams }: UsersPageProps) => {
-  const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
+const UsersPage = async ({ searchParams }: ParamsProps) => {
+  const query = searchParams?.query || "";
+  const currentPage = Number(searchParams?.page) || 1;
 
   const { users, totalPages, lastVisible } = await getFirstUsers();
 
@@ -30,7 +33,16 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
         <div className="bg-white h-full dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
           <div className="overflow-x-auto h-full">
             <CrudHeader />
-            <UserTable users={users} />
+            <Suspense
+              key={query + currentPage}
+              fallback={<UserTableSkeleton />}
+            >
+              <UserTable
+                query={query}
+                currentPage={currentPage}
+                users={users}
+              />
+            </Suspense>
             <Pagination currentPage={currentPage} totalPages={totalPages} />
           </div>
         </div>

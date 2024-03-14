@@ -1,4 +1,5 @@
 import classnames from "classnames";
+import type { InputHTMLAttributes } from "react";
 
 function Input({
   id,
@@ -9,16 +10,8 @@ function Input({
   required,
   autoComplete,
   className,
-}: {
-  id: string;
-  type: string;
-  placeholder?: string;
-  defaultValue?: string;
-  label?: string;
-  required?: boolean;
-  autoComplete?: string;
-  className?: string;
-}) {
+  ...props
+}: InputHTMLAttributes<HTMLInputElement> & { label?: string }) {
   return (
     <div>
       {label && (
@@ -41,6 +34,7 @@ function Input({
         )}
         placeholder={placeholder}
         required={required}
+        {...props}
       />
     </div>
   );

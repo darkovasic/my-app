@@ -1,10 +1,10 @@
 import Input from "@/components/Input";
 import Select from "@/components/Select";
-import type { ActionFunction } from "../context";
-import { useUserContext } from "../context";
-import { useFormState } from "../hooks";
+import type { ActionFunction } from "../util/context";
+import { useUserContext } from "../util/context";
+import { useFormState } from "../util/hooks";
 import SubmitButton from "./SubmitButton";
-import { roleOptions } from "@/app/service/users/context";
+import { roleOptions } from "@/app/service/users/util/context";
 
 function UserForm({ action }: { action: ActionFunction }) {
   const [state, handleSubmit] = useFormState(action);
