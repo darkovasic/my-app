@@ -32,7 +32,7 @@ export type User = {
   updatedAt?: Timestamp | string;
 };
 
-export type UserRaw = {
+export type UserFirebase = {
   role?: FormDataEntryValue | null;
   firstName?: FormDataEntryValue | null;
   lastName?: FormDataEntryValue | null;

@@ -1,7 +1,7 @@
 "use client";
 
 import UserForm from "@/app/service/users/_components/UserForm";
-import { updateUser } from "@/app/service/users/actions";
+import { updateUser } from "@/app/service/users/util/actions";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { ForwardedRef } from "react";

@@ -15,10 +15,11 @@ import {
   startAt,
   limit,
   getCountFromServer,
+  where,
 } from "firebase/firestore";
 // import { cache } from "react";
 import { revalidatePath } from "next/cache";
-import type { User, FullUser, ActionError, UserRaw } from "./context";
+import type { User, FullUser, ActionError, UserFirebase } from "./context";
 import type {
   Query,
   Timestamp,
@@ -26,10 +27,15 @@ import type {
 } from "firebase/firestore";
 
 const schema = "users";
-const coll = collection(db, schema);
+const usersRef = collection(db, schema);
 
-function prepareData(formData: FormData, isUpdate: boolean) {
-  const user: UserRaw = {
+async function getCount(): Promise<number> {
+  const snapshot = await getCountFromServer(usersRef);
+  return snapshot.data().count;
+}
+
+function toFirebase(formData: FormData, isUpdate: boolean) {
+  const user: UserFirebase = {
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
     email: formData.get("email"),
@@ -42,13 +48,25 @@ function prepareData(formData: FormData, isUpdate: boolean) {
   return user;
 }
 
+function toUserPage(data: User) {
+  return {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    email: data.email,
+    role: data.role,
+    description: data.description,
+    createdAt: (data.createdAt as Timestamp)?.toDate().toLocaleString(),
+    updatedAt: (data.updatedAt as Timestamp)?.toDate().toLocaleString(),
+  };
+}
+
 export async function createUser(
   formData: FormData
 ): Promise<ActionError | undefined> {
   try {
     const docRef = await addDoc(
       collection(db, schema),
-      prepareData(formData, false)
+      toFirebase(formData, false)
     );
     revalidatePath("/service/users");
     return { isError: false, message: "User added successfully." };
@@ -67,6 +85,8 @@ const getUsersQuery = async (
     const data: User = doc.data();
     return { id: doc.id, ...toUserPage(data) };
   });
+
+  console.log("[getUsersQuery], users", users);
 
   return { users, lastVisible };
 };
@@ -118,11 +138,11 @@ export async function getUser(id: string) {
   }
 }
 
-export async function updateUser(formData: FormData) {
+export async function updateUser(formData: FormData): Promise<ActionError> {
   const userId = formData.get("id")?.toString();
   if (userId) {
     const docRef = doc(db, schema, userId);
-    await updateDoc(docRef, prepareData(formData, true));
+    await updateDoc(docRef, toFirebase(formData, true));
     revalidatePath("/service/users");
     return { isError: false, message: "User updated successfully." };
   } else {
@@ -130,19 +150,15 @@ export async function updateUser(formData: FormData) {
   }
 }
 
-function toUserPage(data: User) {
-  return {
-    firstName: data.firstName,
-    lastName: data.lastName,
-    email: data.email,
-    role: data.role,
-    description: data.description,
-    createdAt: (data.createdAt as Timestamp)?.toDate().toLocaleString(),
-    updatedAt: (data.updatedAt as Timestamp)?.toDate().toLocaleString(),
-  };
-}
-
-async function getCount(): Promise<number> {
-  const snapshot = await getCountFromServer(coll);
-  return snapshot.data().count;
+export async function searchUsers(formData: FormData, pageLimit = 10) {
+  const term = formData.get("query");
+  const query = firestoreQuery(
+    usersRef,
+    where("firstName", "==", term),
+    // where(term, "in", ["firstName", "lastName", "email"]),
+    orderBy("createdAt", "desc"),
+    limit(pageLimit)
+  );
+  const { users, lastVisible } = await getUsersQuery(query);
+  return users;
 }

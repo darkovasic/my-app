@@ -1,5 +1,5 @@
-import { deleteUser } from "@/app/service/users/actions";
-import { useUserContext } from "@/app/service/users/context";
+import { deleteUser } from "@/app/service/users/util/actions";
+import { useUserContext } from "@/app/service/users/util/context";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { ForwardedRef } from "react";

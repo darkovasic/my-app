@@ -1,5 +1,5 @@
 import UserDropdownMenu from "../_components/UserDropdownMenu";
-import type { FullUser } from "../context";
+import type { FullUser } from "../util/context";
 
 function UserTable({ users }: { users: FullUser[] }) {
   return (

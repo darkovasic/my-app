@@ -1,7 +1,7 @@
 "use client";
 
 import * as Popover from "@radix-ui/react-popover";
-import { roleOptions } from "@/app/service/users/context";
+import { roleOptions } from "@/app/service/users/util/context";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
 
 function FilterUsersPopover() {
