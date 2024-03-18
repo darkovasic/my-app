@@ -40,7 +40,7 @@ const UsersPage = async ({ searchParams }: ParamsProps) => {
               <UserTable
                 query={query}
                 currentPage={currentPage}
-                users={users}
+                // users={users}
               />
             </Suspense>
             <Pagination currentPage={currentPage} totalPages={totalPages} />

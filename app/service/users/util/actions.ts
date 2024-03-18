@@ -27,6 +27,7 @@ import type {
 
 const schema = "users";
 const usersRef = collection(db, schema);
+const ITEMS_PER_PAGE = 10;
 
 async function getCount(): Promise<number> {
   const snapshot = await getCountFromServer(usersRef);
@@ -85,12 +86,10 @@ const getUsersQuery = async (
     return { id: doc.id, ...toUserPage(data) };
   });
 
-  console.log("[getUsersQuery], users", users);
-
   return { users, lastVisible };
 };
 
-export const getFirstUsers = async (pageLimit = 10) => {
+export const getFirstUsers = async (pageLimit = ITEMS_PER_PAGE) => {
   const count = await getCount();
   const totalPages = Math.ceil(count / pageLimit);
 
@@ -149,15 +148,48 @@ export async function updateUser(formData: FormData): Promise<ActionError> {
   }
 }
 
-export async function searchUsers(term: string, pageLimit = 10) {
+export async function searchUsers(term?: string) {
   noStore();
-  const query = firestoreQuery(
-    usersRef,
-    where("firstName", "==", term),
-    // where(term, "in", ["firstName", "lastName", "email"]),
-    orderBy("createdAt", "desc"),
-    limit(pageLimit)
-  );
-  const { users, lastVisible } = await getUsersQuery(query);
+  if (term) {
+    const firstNameQuery = firestoreQuery(
+      usersRef,
+      where("firstName", "==", term),
+      orderBy("createdAt", "desc"),
+      limit(ITEMS_PER_PAGE)
+    );
+    const lastNameQuery = firestoreQuery(
+      usersRef,
+      where("lastName", "==", term),
+      orderBy("createdAt", "desc"),
+      limit(ITEMS_PER_PAGE)
+    );
+    const emailQuery = firestoreQuery(
+      usersRef,
+      where("email", "==", term),
+      orderBy("createdAt", "desc"),
+      limit(ITEMS_PER_PAGE)
+    );
+
+    const [firstNameSnapshot, lastNameSnapshot, emailSnapshot] =
+      await Promise.all([
+        getUsersQuery(firstNameQuery),
+        getUsersQuery(lastNameQuery),
+        getUsersQuery(emailQuery),
+      ]);
+
+    // console.log("[searchUsers] users:", users);
+    const users = [
+      ...firstNameSnapshot.users,
+      ...lastNameSnapshot.users,
+      ...emailSnapshot.users,
+    ];
+
+    const uniqueUsers = Array.from(new Set(users.map((user) => user.id)))
+      .map((id) => users.find((user) => user.id === id))
+      .filter((user) => user !== undefined) as FullUser[];
+
+    return uniqueUsers;
+  }
+  const { users, totalPages, lastVisible } = await getFirstUsers();
   return users;
 }
