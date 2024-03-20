@@ -149,26 +149,20 @@ export async function updateUser(formData: FormData): Promise<ActionError> {
 }
 
 export async function searchUsers(term?: string) {
-  noStore();
+  function createQuery(field: string, value: string) {
+    return firestoreQuery(
+      usersRef,
+      where(field, "==", value),
+      orderBy("createdAt", "desc"),
+      limit(ITEMS_PER_PAGE)
+    );
+  }
+
   if (term) {
-    const firstNameQuery = firestoreQuery(
-      usersRef,
-      where("firstName", "==", term),
-      orderBy("createdAt", "desc"),
-      limit(ITEMS_PER_PAGE)
-    );
-    const lastNameQuery = firestoreQuery(
-      usersRef,
-      where("lastName", "==", term),
-      orderBy("createdAt", "desc"),
-      limit(ITEMS_PER_PAGE)
-    );
-    const emailQuery = firestoreQuery(
-      usersRef,
-      where("email", "==", term),
-      orderBy("createdAt", "desc"),
-      limit(ITEMS_PER_PAGE)
-    );
+    noStore();
+    const firstNameQuery = createQuery("firstName", term);
+    const lastNameQuery = createQuery("lastName", term);
+    const emailQuery = createQuery("email", term);
 
     const [firstNameSnapshot, lastNameSnapshot, emailSnapshot] =
       await Promise.all([
@@ -177,16 +171,15 @@ export async function searchUsers(term?: string) {
         getUsersQuery(emailQuery),
       ]);
 
-    // console.log("[searchUsers] users:", users);
     const users = [
       ...firstNameSnapshot.users,
       ...lastNameSnapshot.users,
       ...emailSnapshot.users,
     ];
 
-    const uniqueUsers = Array.from(new Set(users.map((user) => user.id)))
-      .map((id) => users.find((user) => user.id === id))
-      .filter((user) => user !== undefined) as FullUser[];
+    const uniqueUsers = Array.from(new Set(users.map((user) => user.id))).map(
+      (id) => users.find((user) => user.id === id)
+    ) as FullUser[];
 
     return uniqueUsers;
   }

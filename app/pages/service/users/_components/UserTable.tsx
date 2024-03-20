@@ -1,5 +1,5 @@
-import UserDropdownMenu from "../_components/UserDropdownMenu";
-import { searchUsers } from "@/app/service/users/util/actions";
+import UserDropdownMenu from "./UserDropdownMenu";
+import { searchUsers } from "@/app/pages/service/users/util/actions";
 
 async function UserTable({
   query,

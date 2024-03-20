@@ -3,9 +3,9 @@ import Link from "next/link";
 import NavLink from "@/components/NavLink";
 
 const links = [
-  { slug: "service", title: "Service" },
-  { slug: "blog", title: "Blog" },
-  { slug: "tutorials", title: "Tutorials" },
+  { slug: "pages/service", title: "Service" },
+  { slug: "pages/blog", title: "Blog" },
+  { slug: "pages/tutorials", title: "Tutorials" },
 ];
 
 function Header() {

@@ -2,7 +2,7 @@ import { LucideIcon } from "lucide-react";
 import { useContext } from "react";
 import { SidebarContext } from "./Sidebar";
 import Link from "next/link";
-import NavLink from "@/components/NavLink";
+import { usePathname } from "next/navigation";
 
 type SidebarItemProps = {
   Icon: LucideIcon;
@@ -12,8 +12,11 @@ type SidebarItemProps = {
 };
 
 const SidebarItem = ({ Icon, text, active, alert }: SidebarItemProps) => {
+  const url = usePathname();
+  const pathname = url.substring(0, url.lastIndexOf("/"));
+  console.log("[Sidebar Item] pathname", pathname);
+
   const { expanded } = useContext(SidebarContext);
-  // console.log("[SidebarItem] expanded:", expanded);
   return (
     <li
       className={`relative flex items-center py-2 px-3 my-1
@@ -25,7 +28,9 @@ const SidebarItem = ({ Icon, text, active, alert }: SidebarItemProps) => {
     >
       <Link
         href={
-          text === "Users" ? `/service/${text.toLowerCase()}` : "/service/#"
+          text === "Users"
+            ? `${pathname}/${text.toLowerCase()}`
+            : `${pathname}/#`
         }
         className={`flex`}
       >
