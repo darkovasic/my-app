@@ -14,7 +14,6 @@ type SidebarItemProps = {
 const SidebarItem = ({ Icon, text, active, alert }: SidebarItemProps) => {
   const url = usePathname();
   const pathname = url.substring(0, url.lastIndexOf("/"));
-  console.log("[Sidebar Item] pathname", pathname);
 
   const { expanded } = useContext(SidebarContext);
   return (

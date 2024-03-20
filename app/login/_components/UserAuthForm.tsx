@@ -6,12 +6,6 @@ import { Button } from "./Button";
 import { Label } from "./Label";
 import { Icons } from "./Icons";
 
-// import { cn } from "@/lib/utils";
-// import { Icons } from "@/components/icons";
-// import { Button } from "@/registry/new-york/ui/button";
-// import { Input } from "@/registry/new-york/ui/input";
-// import { Label } from "@/registry/new-york/ui/label";
-
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
@@ -44,7 +38,25 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
             />
           </div>
-          <Button disabled={isLoading}>
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              id="password"
+              placeholder="Enter your password here"
+              type="password"
+              autoCapitalize="none"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
+          </div>
+          <Button
+            disabled={isLoading}
+            parentClasses={
+              "bg-login-primary text-login-primary-foreground shadow hover:bg-login-primary/90"
+            }
+          >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
@@ -62,7 +74,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button type="button" disabled={isLoading}>
+      <Button
+        type="button"
+        disabled={isLoading}
+        parentClasses={
+          "border hover:bg-login-secondary text-login-secondary-foreground shadow-sm"
+        }
+      >
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (

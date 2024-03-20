@@ -1,23 +1,18 @@
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 
-function LeftImage() {
+function LeftImage({ image }: { image: StaticImageData }) {
   return (
-    <div className="md:hidden">
-      <Image
-        src="/examples/authentication-light.png"
-        width={1280}
-        height={843}
-        alt="Authentication"
-        className="block dark:hidden"
-      />
-      <Image
-        src="/examples/authentication-dark.png"
-        width={1280}
-        height={843}
-        alt="Authentication"
-        className="hidden dark:block"
-      />
-    </div>
+    <Image
+      src={image}
+      // width={1280}
+      // height={843}
+      fill
+      alt="Authentication"
+      sizes="100vw"
+      style={{
+        objectFit: "cover",
+      }}
+    />
   );
 }
 

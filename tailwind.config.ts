@@ -13,6 +13,16 @@ const config: Config = {
         ...blackA,
         ...mauve,
         ...violet,
+        login: {
+          primary: {
+            DEFAULT: "hsl(240,5.9%,10%)",
+            foreground: "hsl(0,0%,98%)",
+          },
+          secondary: {
+            DEFAULT: "hsl(240,4.8%,95.9%)",
+            foreground: "hsl(240,5.9%,10%)",
+          },
+        },
       },
       keyframes: {
         overlayShow: {
