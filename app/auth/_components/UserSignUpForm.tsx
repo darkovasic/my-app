@@ -1,27 +1,54 @@
 "use client";
 
+import { auth } from "@/app/lib/firebase";
+import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import Input from "@/components/Input";
 import { useState } from "react";
 import { Button } from "./Button";
 import { Label } from "./Label";
 import { Icons } from "./Icons";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function UserSignUpForm() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState("");
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        setIsLoading(false);
+        const user = userCredential.user;
+        console.log("[UserAuthForm] userCredential: ", userCredential);
+        router.push("/pages");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrors(errorMessage);
+        setIsLoading(false);
+        console.error("[UserAuthForm] error: ", errorCode, errorMessage);
+      });
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    // await updateProfile(auth.currentUser, {
+    //   displayName: email,
+    // })
+    //   .then(() => {
+    //     console.log("updated successfully");
+    //   })
+    //   .catch((error) => {
+    //     console.error("error updating name");
+    //     console.error(error);
+    //   });
   }
 
   return (
-    <div className={"grid gap-6"}>
+    <div className="grid gap-6">
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -32,10 +59,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               id="email"
               placeholder="name@example.com"
               type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
+              required
             />
           </div>
           <div className="grid gap-1">
@@ -46,9 +76,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               id="password"
               placeholder="Enter your password here"
               type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               autoCapitalize="none"
               autoCorrect="off"
               disabled={isLoading}
+              required
             />
           </div>
           <Button
@@ -60,7 +93,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Log In with Email
+            Sign Up with Email
           </Button>
         </div>
       </form>

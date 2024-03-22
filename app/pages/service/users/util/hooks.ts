@@ -1,6 +1,10 @@
 import { useState } from "react";
 import type { FormEventHandler } from "react";
-import { ActionFunction, FormHookResult, SubmissionState } from "./context";
+import type {
+  ActionFunction,
+  FormHookResult,
+  SubmissionState,
+} from "./context";
 
 export function useFormState(action: ActionFunction): FormHookResult {
   const [state, setState] = useState<SubmissionState>({
