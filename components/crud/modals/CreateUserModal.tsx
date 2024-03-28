@@ -1,9 +1,9 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { createUser } from "@/app/pages/service/users/util/actions";
-import UserForm from "@/app/pages/service/users/_components/UserForm";
-import UserContext from "@/app/pages/service/users/util/context";
+import { createUser } from "@/app/pages/admin/users/util/actions";
+import UserForm from "@/app/pages/admin/users/_components/UserForm";
+import UserContext from "@/app/pages/admin/users/util/context";
 import { Plus } from "lucide-react";
 
 function CreateUserModal() {

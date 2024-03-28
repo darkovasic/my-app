@@ -12,10 +12,9 @@ type SidebarItemProps = {
 };
 
 const SidebarItem = ({ Icon, text, active, alert }: SidebarItemProps) => {
-  const url = usePathname();
-  const pathname = url.substring(0, url.lastIndexOf("/"));
-
+  const pathname = usePathname();
   const { expanded } = useContext(SidebarContext);
+
   return (
     <li
       className={`relative flex items-center py-2 px-3 my-1

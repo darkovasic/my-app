@@ -1,4 +1,4 @@
-import ActionsDropdownButton from "@/app/pages/service/users/_components/ActionsDropdownButton";
+import ActionsDropdownButton from "@/app/pages/admin/users/_components/ActionsDropdownButton";
 import CreateUserModal from "@/components/crud/modals/CreateUserModal";
 import Search from "@/components/Search";
 import FilterUsersPopover from "@/components/crud/modals/FilterUsersPopover";

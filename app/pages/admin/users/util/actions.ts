@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@/app/lib/firebase";
+import { db } from "@/app/lib/firebase-config";
 import {
   doc,
   collection,
@@ -105,8 +105,6 @@ export const getFirstUsers = async (pageLimit = ITEMS_PER_PAGE) => {
 };
 
 export const getNextUsers = async (qs: QueryDocumentSnapshot) => {
-  // Construct a new query starting at this document,
-  // get the next 10 users.
   const next = firestoreQuery(
     collection(db, schema),
     orderBy("createdAt", "desc"),

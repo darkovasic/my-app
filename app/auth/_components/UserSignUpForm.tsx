@@ -1,55 +1,51 @@
 "use client";
 
-import { auth } from "@/app/lib/firebase";
+// import { auth } from "@/app/lib/firebase";
 import { useRouter } from "next/navigation";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createAuthUser } from "../util/actions";
+// import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import Input from "@/components/Input";
-import { useState } from "react";
+// import { useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "./Button";
 import { Label } from "./Label";
 import { Icons } from "./Icons";
 
+const initialState = {
+  message: "",
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  console.log("[SubmitButton] pending: ", pending);
+  return (
+    <Button
+      type="submit"
+      disabled={pending}
+      parentClasses={
+        "bg-login-primary mt-1 text-login-primary-foreground shadow hover:bg-login-primary/90"
+      }
+    >
+      {pending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+      Sign Up with Email
+    </Button>
+  );
+}
+
 export function UserSignUpForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [state, formAction] = useFormState(createAuthUser, initialState);
+  const { pending } = useFormStatus();
+  console.log("[UserSignUpForm] pending: ", pending);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState("");
-
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setIsLoading(true);
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        setIsLoading(false);
-        const user = userCredential.user;
-        console.log("[UserAuthForm] userCredential: ", userCredential);
-        router.push("/pages");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        setErrors(errorMessage);
-        setIsLoading(false);
-        console.error("[UserAuthForm] error: ", errorCode, errorMessage);
-      });
-
-    // await updateProfile(auth.currentUser, {
-    //   displayName: email,
-    // })
-    //   .then(() => {
-    //     console.log("updated successfully");
-    //   })
-    //   .catch((error) => {
-    //     console.error("error updating name");
-    //     console.error(error);
-    //   });
-  }
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [errors, setErrors] = useState("");
 
   return (
     <div className="grid gap-6">
-      <form onSubmit={onSubmit}>
+      <form action={formAction}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -59,12 +55,12 @@ export function UserSignUpForm() {
               id="email"
               placeholder="name@example.com"
               type="email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              // onChange={(e) => setEmail(e.target.value)}
+              // value={email}
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading}
+              // disabled={isLoading}
               required
             />
           </div>
@@ -76,25 +72,33 @@ export function UserSignUpForm() {
               id="password"
               placeholder="Enter your password here"
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
+              // onChange={(e) => setPassword(e.target.value)}
+              // value={password}
               autoCapitalize="none"
               autoCorrect="off"
-              disabled={isLoading}
+              // disabled={isLoading}
+              minLength={6}
               required
             />
           </div>
-          <Button
-            disabled={isLoading}
-            parentClasses={
-              "bg-login-primary text-login-primary-foreground shadow hover:bg-login-primary/90"
-            }
-          >
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Sign Up with Email
-          </Button>
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="confirm_password">
+              Confirm Password
+            </Label>
+            <Input
+              id="confirm_password"
+              placeholder="Confirm your password here"
+              type="password"
+              // onChange={(e) => setPassword(e.target.value)}
+              // value={confirmPassword}
+              autoCapitalize="none"
+              autoCorrect="off"
+              // disabled={isLoading}
+              minLength={6}
+              required
+            />
+          </div>
+          <SubmitButton />
         </div>
       </form>
       <div className="relative">
@@ -109,17 +113,17 @@ export function UserSignUpForm() {
       </div>
       <Button
         type="button"
-        disabled={isLoading}
+        disabled={pending}
         parentClasses={
           "border hover:bg-login-secondary text-login-secondary-foreground shadow-sm"
         }
       >
-        {isLoading ? (
+        {pending ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
+          <Icons.google className="mr-2 h-4 w-4" />
         )}{" "}
-        GitHub
+        Google
       </Button>
     </div>
   );

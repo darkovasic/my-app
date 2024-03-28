@@ -14,7 +14,7 @@ function Pagination({
   const router = useRouter();
   const pathname = usePathname();
   const pageLimit = 10;
-  console.log("[Pagination] currentPage:", currentPage);
+  // console.log("[Pagination] currentPage:", currentPage);
 
   const handleNextPage = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();

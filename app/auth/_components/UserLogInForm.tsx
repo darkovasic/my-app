@@ -1,6 +1,7 @@
 "use client";
 
-import { auth } from "@/app/lib/firebase";
+// import { auth } from "@/app/lib/firebase-config";
+import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Input from "@/components/Input";
@@ -9,31 +10,40 @@ import { Button } from "./Button";
 import { Label } from "./Label";
 import { Icons } from "./Icons";
 
-export function UserAuthForm() {
+export function UserLogInForm() {
   const router = useRouter();
+  const auth = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
 
+  const loginGoogle = () => {
+    console.log("[loginGoogle]");
+    auth
+      ?.loginGoogle()
+      .then(() => console.log("Logged in!"))
+      .catch(() => console.error("Something went wrong"));
+  };
+
   function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        setIsLoading(false);
-        const user = userCredential.user;
-        console.log("[UserAuthForm] userCredential: ", userCredential);
-        router.push("/pages");
-      })
-      .catch((error) => {
-        const errorCode: string = error.code;
-        const errorMessage: string = error.message;
-        setErrors(errorMessage);
-        setIsLoading(false);
-        console.error("[UserAuthForm] error: ", errorCode, errorMessage);
-      });
+    // signInWithEmailAndPassword(auth, email, password)
+    //   .then((userCredential) => {
+    //     setIsLoading(false);
+    //     // const user = userCredential.user;
+    //     console.log("[UserAuthForm] userCredential: ", userCredential);
+    //     router.push("/pages");
+    //   })
+    //   .catch((error) => {
+    //     const errorCode: string = error.code;
+    //     const errorMessage: string = error.message;
+    //     setErrors(errorMessage);
+    //     setIsLoading(false);
+    //     console.error("[UserAuthForm] error: ", errorCode, errorMessage);
+    //   });
   }
 
   return (
@@ -70,13 +80,14 @@ export function UserAuthForm() {
               autoCapitalize="none"
               autoCorrect="off"
               disabled={isLoading}
+              minLength={6}
               required
             />
           </div>
           <Button
             disabled={isLoading}
             parentClasses={
-              "bg-login-primary text-login-primary-foreground shadow hover:bg-login-primary/90"
+              "mt-1 bg-login-primary text-login-primary-foreground shadow hover:bg-login-primary/90"
             }
           >
             {isLoading && (
@@ -99,6 +110,7 @@ export function UserAuthForm() {
       <Button
         type="button"
         disabled={isLoading}
+        onClick={loginGoogle}
         parentClasses={
           "border hover:bg-login-secondary text-login-secondary-foreground shadow-sm"
         }
@@ -106,9 +118,9 @@ export function UserAuthForm() {
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
+          <Icons.google className="mr-2 h-4 w-4" />
         )}{" "}
-        GitHub
+        Google
       </Button>
     </div>
   );

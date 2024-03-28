@@ -3,7 +3,8 @@ import { catamaran, robotoMono } from "@/app/fonts";
 import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import AuthProvider from "../context/AuthProvider";
+// import AuthProvider from "../context/AuthProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
   title: {

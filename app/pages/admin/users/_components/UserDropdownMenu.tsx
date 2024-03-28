@@ -1,7 +1,7 @@
 "use client";
 
-import type { FullUser } from "@/app/pages/service/users/util/context";
-import UserContext from "@/app/pages/service/users/util/context";
+import type { FullUser } from "@/app/pages/admin/users/util/context";
+import UserContext from "@/app/pages/admin/users/util/context";
 import DeleteUserModal from "@/components/crud/modals/DeleteUserModal";
 import UpdateUserModal from "@/components/crud/modals/UpdateUserModal";
 import { EyeIcon } from "@heroicons/react/24/outline";
