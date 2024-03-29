@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-spacing */
 import { initializeApp } from "firebase-admin/app";
 import { auth, config } from "firebase-functions";
 import { firestore } from "firebase-admin";
@@ -5,10 +6,7 @@ import { getAuth } from "firebase-admin/auth";
 
 initializeApp(config().firebase);
 
-debugger;
-
 export const onUserCreate = auth.user().onCreate(async (user) => {
-  console.log("onUserCreate: ", user);
   if (
     (user.email && user.email === "darko.vasic@gmail.com") ||
     (user.email && user.email === "admin@example.com")

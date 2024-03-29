@@ -20,7 +20,6 @@ export function UserLogInForm() {
   const [errors, setErrors] = useState("");
 
   const loginGoogle = () => {
-    console.log("[loginGoogle]");
     auth
       ?.loginGoogle()
       .then(() => console.log("Logged in!"))

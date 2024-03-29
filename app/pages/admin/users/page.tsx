@@ -20,7 +20,6 @@ const UsersPage = async ({ searchParams }: ParamsProps) => {
 
   const { users, totalPages, lastVisible } = await getFirstUsers();
 
-  console.log("[UsersPage], currentPage", currentPage);
 
   // async function nextPageHandler() {
   //   "use server";

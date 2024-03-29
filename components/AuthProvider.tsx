@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }: { children: any }) => {
   const [isPro, setIsPro] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("[AuthProvider]", auth);
     if (!auth) return;
 
     return auth.onAuthStateChanged(async (user) => {
@@ -51,8 +50,6 @@ export const AuthProvider = ({ children }: { children: any }) => {
 
         const tokenValues = await user.getIdTokenResult();
         setIsAdmin(tokenValues.claims.role === "admin");
-
-        console.log("[AuthProvider] tokenValues: ", tokenValues);
 
         const userResponse = await fetch(`/api/users/${user.uid}`, {
           headers: {

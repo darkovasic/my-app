@@ -7,7 +7,6 @@ import { SidebarContext } from "./Sidebar";
 function UserCard() {
   const { expanded } = useContext(SidebarContext);
   // const { data: session } = useSession();
-  // console.log("[UserCard] session", session);
   // if (session) {
   //   return (
   //     <div className="border-t flex p-3">

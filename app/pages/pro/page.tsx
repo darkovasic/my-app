@@ -18,7 +18,6 @@ const ProPage = async () => {
   } catch (error) {
     console.error("verifyIdToken", error);
   }
-  console.log("[ProPage] user: ", user);
 
   if (!user) {
     return (
