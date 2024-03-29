@@ -10,9 +10,9 @@ function Header() {
   const activePath = usePathname();
   const auth = useAuth();
 
-  const isAdminPage = activePath?.includes("/service");
-  const isProPage = activePath?.includes("/blog");
-  const isUserPage = activePath?.includes("/tutorials");
+  const isAdminPage = activePath?.includes("/admin");
+  const isProPage = activePath?.includes("/pro");
+  const isUserPage = activePath?.includes("/user");
 
   const logout = () => {
     auth
@@ -49,8 +49,8 @@ function Header() {
           </li>
         )}
         {!isUserPage && (
-          <li key="pages/tutorials" className={`hover:text-blue-300`}>
-            <NavLink path="pages/tutorials" label="Tutorials" />
+          <li key="pages/user" className={`hover:text-blue-300`}>
+            <NavLink path="pages/user" label="User" />
           </li>
         )}
       </ul>

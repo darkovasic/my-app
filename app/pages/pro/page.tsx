@@ -1,8 +1,61 @@
+import { cookies } from "next/headers";
 import { ItemAccess, type Item } from "../../api/items/route";
+import { redirect } from "next/navigation";
+import { DecodedIdToken } from "firebase-admin/auth";
+import { auth } from "@/firebase/server";
 
 const ProPage = async () => {
+  const cookieStore = cookies();
+  const authToken = cookieStore.get("firebaseIdToken")?.value;
+
+  if (!authToken || !auth) {
+    return redirect("/auth/login");
+  }
+
+  let user: DecodedIdToken | null = null;
+  try {
+    user = await auth.verifyIdToken(authToken);
+  } catch (error) {
+    console.error("verifyIdToken", error);
+  }
+  console.log("[ProPage] user: ", user);
+
+  if (!user) {
+    return (
+      <div className="flex bg-cyan-900 text-white font-bold items-center justify-center w-full">
+        <h1 className="text-xl mb-10">Restricted Page</h1>
+      </div>
+    );
+  }
+
+  let userInfo = null;
+  const userInfoResponse = await fetch(
+    `${process.env.API_URL}/api/users/${user.uid}`,
+    {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    }
+  );
+  if (userInfoResponse.ok) {
+    userInfo = await userInfoResponse.json();
+  }
+
+  const isPro = userInfo?.isPro;
+  if (!isPro) {
+    return (
+      <div className="flex items-center justify-center w-full">
+        <h1 className="text-xl mb-10">Restricted Page</h1>
+      </div>
+    );
+  }
+
   let items: Item[] = [];
-  const response = await fetch(`${process.env.API_URL}/api/items`);
+  const response = await fetch(`${process.env.API_URL}/api/items`, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
   if (response.ok) {
     const itemsJson = await response.json();
     if (itemsJson && itemsJson.length > 0) items = itemsJson;

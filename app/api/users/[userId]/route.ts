@@ -1,4 +1,5 @@
-import { firestore } from "@/firebase/server";
+import { auth, firestore } from "@/firebase/server";
+import { DecodedIdToken } from "firebase-admin/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -9,6 +10,23 @@ export async function GET(
     if (!firestore) {
       return new NextResponse("Internal Error", { status: 500 });
     }
+
+    const authToken =
+      request.headers.get("authorization")?.split("Bearer ")[1] || null;
+
+    let user: DecodedIdToken | null = null;
+    if (auth && authToken) {
+      try {
+        user = await auth.verifyIdToken(authToken);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    const isAdmin = user?.role === "admin";
+
+    const valid = isAdmin || user?.uid === params.userId;
+    if (!valid) return new NextResponse("Unauthorized", { status: 401 });
 
     const userDocument = await firestore
       .collection("users")

@@ -1,8 +1,21 @@
+import { cookies } from "next/headers";
 import { ItemAccess, type Item } from "../../api/items/route";
+import { redirect } from "next/navigation";
 
 const AdminPage = async () => {
+  const cookieStore = cookies();
+  const authToken = cookieStore.get("firebaseIdToken")?.value;
+
+  if (!authToken) {
+    return redirect("/auth/login");
+  }
+
   let items: Item[] = [];
-  const response = await fetch(`${process.env.API_URL}/api/items`);
+  const response = await fetch(`${process.env.API_URL}/api/items`, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
   if (response.ok) {
     const itemsJson = await response.json();
     if (itemsJson && itemsJson.length > 0) items = itemsJson;

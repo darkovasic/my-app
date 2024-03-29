@@ -52,7 +52,13 @@ export const AuthProvider = ({ children }: { children: any }) => {
         const tokenValues = await user.getIdTokenResult();
         setIsAdmin(tokenValues.claims.role === "admin");
 
-        const userResponse = await fetch(`/api/users/${user.uid}`);
+        console.log("[AuthProvider] tokenValues: ", tokenValues);
+
+        const userResponse = await fetch(`/api/users/${user.uid}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (userResponse.ok) {
           const userJson = await userResponse.json();
           if (userJson?.isPro) setIsPro(true);

@@ -8,8 +8,10 @@ import {
 } from "firebase-admin/app";
 import serviceAccount from "./firebase-admin-account.json";
 import { Firestore, getFirestore } from "firebase-admin/firestore";
+import { Auth, getAuth } from "firebase-admin/auth";
 
 let firestore: Firestore | undefined = undefined;
+let auth: Auth | undefined = undefined;
 
 const currentApps = getApps();
 
@@ -25,8 +27,10 @@ if (currentApps.length <= 0) {
     //   databaseURL: `https://${serviceAccount.project_id}.firebaseio.com`,
   });
   firestore = getFirestore(app);
+  auth = getAuth(app);
 } else {
   firestore = getFirestore(currentApps[0]);
+  auth = getAuth(currentApps[0]);
 }
 
-export { firestore };
+export { firestore, auth };

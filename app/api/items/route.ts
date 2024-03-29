@@ -1,4 +1,5 @@
-import { firestore } from "@/firebase/server";
+import { auth, firestore } from "@/firebase/server";
+import { DecodedIdToken } from "firebase-admin/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export enum ItemAccess {
@@ -29,7 +30,61 @@ export async function GET(request: NextRequest) {
     if (!firestore) {
       return new NextResponse("Internal Error : no firestore", { status: 500 });
     }
-    const response = await firestore.collection("items").get();
+
+    const authToken =
+      request.headers.get("authorization")?.split("Bearer ")[1] || null;
+
+    let user: DecodedIdToken | null = null;
+    if (auth && authToken) {
+      try {
+        user = await auth.verifyIdToken(authToken);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    const isAdmin = user?.role === "admin";
+
+    let userInfo = null;
+    if (user) {
+      const userInfoResponse = await fetch(
+        `${process.env.API_URL}/api/users/${user.uid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      if (userInfoResponse.ok) {
+        userInfo = await userInfoResponse.json();
+      }
+    }
+
+    const isPro = userInfo?.isPro;
+
+    const firestoreCall =
+      user && !isPro && !isAdmin
+        ? firestore
+            .collection("items")
+            .where("access", "in", [ItemAccess.PUBLIC, ItemAccess.USER])
+            .get()
+        : isPro && !isAdmin
+        ? firestore
+            .collection("items")
+            .where("access", "in", [
+              ItemAccess.PUBLIC,
+              ItemAccess.USER,
+              ItemAccess.PRO,
+            ])
+            .get()
+        : isAdmin
+        ? firestore.collection("items").get()
+        : firestore
+            .collection("items")
+            .where("access", "in", [ItemAccess.PUBLIC])
+            .get();
+
+    const response = await firestoreCall;
     const items = response.docs.map((doc) => doc.data());
 
     if (items.length <= 0) {
