@@ -1,37 +1,26 @@
-import type { Metadata } from "next";
-import { catamaran, robotoMono } from "@/app/fonts";
-import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/sonner";
 // import AuthProvider from "../context/AuthProvider";
 // import { AuthProvider } from "@/components/AuthProvider";
 
-export const metadata: Metadata = {
-  title: {
-    default: "My App",
-    template: "%s | My App",
-  },
-  description: "My sandbox project.",
-};
-
-export default function RootLayout({
+export default function PageLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${catamaran.variable} ${robotoMono.variable}`}>
-      <body className="bg-slate-50 flex flex-col h-screen">
-        {/* <AuthProvider> */}
-        <header>
-          <Header />
-        </header>
-        <main className="flex grow">{children}</main>
-        <footer>
-          <Footer />
-        </footer>
-        {/* </AuthProvider> */}
-      </body>
-    </html>
+    <body className="bg-slate-50 flex flex-col h-screen">
+      {/* <AuthProvider> */}
+      <header>
+        <Header />
+      </header>
+      <main className="flex grow">{children}</main>
+      <Toaster />
+      <footer>
+        <Footer />
+      </footer>
+      {/* </AuthProvider> */}
+    </body>
   );
 }
