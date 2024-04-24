@@ -1,9 +1,8 @@
 "use client";
 
-// import { auth } from "@/app/lib/firebase-config";
-import { useAuth } from "@/components/AuthProvider";
+// import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { login } from "../util/actions";
 import Input from "@/components/Input";
 import { useState } from "react";
 import { Button } from "./Button";
@@ -12,37 +11,37 @@ import { Icons } from "./Icons";
 
 export function UserLogInForm() {
   const router = useRouter();
-  const auth = useAuth();
+  // const auth = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
 
-  const loginGoogle = () => {
-    auth
-      ?.loginGoogle()
-      .then(() => console.log("Logged in!"))
-      .catch(() => console.error("Something went wrong"));
-  };
+  // const loginGoogle = () => {
+  //   auth
+  //     ?.loginGoogle()
+  //     .then(() => console.log("Logged in!"))
+  //     .catch(() => console.error("Something went wrong"));
+  // };
 
   function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-    // signInWithEmailAndPassword(auth, email, password)
-    //   .then((userCredential) => {
-    //     setIsLoading(false);
-    //     // const user = userCredential.user;
-    //     console.log("[UserAuthForm] userCredential: ", userCredential);
-    //     router.push("/pages");
-    //   })
-    //   .catch((error) => {
-    //     const errorCode: string = error.code;
-    //     const errorMessage: string = error.message;
-    //     setErrors(errorMessage);
-    //     setIsLoading(false);
-    //     console.error("[UserAuthForm] error: ", errorCode, errorMessage);
-    //   });
+    login(email, password)
+      .then((userCredential) => {
+        setIsLoading(false);
+        // const user = userCredential.user;
+        console.log("[UserAuthForm] userCredential: ", userCredential);
+        router.push("/pages");
+      })
+      .catch((error) => {
+        const errorCode: string = error.code;
+        const errorMessage: string = error.message;
+        setErrors(errorMessage);
+        setIsLoading(false);
+        console.error("[UserAuthForm] error: ", errorCode, errorMessage);
+      });
   }
 
   return (
@@ -109,7 +108,7 @@ export function UserLogInForm() {
       <Button
         type="button"
         disabled={isLoading}
-        onClick={loginGoogle}
+        // onClick={loginGoogle}
         parentClasses={
           "border hover:bg-login-secondary text-login-secondary-foreground shadow-sm"
         }

@@ -1,35 +1,30 @@
 import { redirect } from "next/navigation";
-import { ItemAccess, type Item } from "../../api/items/route";
+// import { ItemAccess, type Item } from "../../api/items/route";
 import { cookies } from "next/headers";
 
 const UserPage = async () => {
   const cookieStore = cookies();
-  const authToken = cookieStore.get("firebaseIdToken")?.value;
+  // const authToken = cookieStore.get("firebaseIdToken")?.value;
 
-  if (!authToken) {
-    // return (
-    //   <div className="flex items-center justify-center w-full">
-    //     <h1 className="text-xl mb-10">Restricted Page</h1>
-    //   </div>
-    // );
-    return redirect("/auth/login");
-  }
+  // if (!authToken) {
+  //   return redirect("/auth/login");
+  // }
 
-  let items: Item[] = [];
-  const response = await fetch(`${process.env.API_URL}/api/items`, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
-  if (response.ok) {
-    const itemsJson = await response.json();
-    if (itemsJson && itemsJson.length > 0) items = itemsJson;
-  }
+  // let items: Item[] = [];
+  // const response = await fetch(`${process.env.API_URL}/api/items`, {
+  //   headers: {
+  //     Authorization: `Bearer ${authToken}`,
+  //   },
+  // });
+  // if (response.ok) {
+  //   const itemsJson = await response.json();
+  //   if (itemsJson && itemsJson.length > 0) items = itemsJson;
+  // }
 
   return (
     <section className="flex flex-col items-center w-full bg-cyan-800 pt-40">
       <h1 className="text-white text-xl mb-10">User Page</h1>
-      <div className="w-72">
+      {/* <div className="w-72">
         {items.map((item) => {
           return (
             <div
@@ -53,7 +48,7 @@ const UserPage = async () => {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </section>
   );
 };

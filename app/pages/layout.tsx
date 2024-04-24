@@ -4,7 +4,7 @@ import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 // import AuthProvider from "../context/AuthProvider";
-import { AuthProvider } from "@/components/AuthProvider";
+// import { AuthProvider } from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -22,15 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${catamaran.variable} ${robotoMono.variable}`}>
       <body className="bg-slate-50 flex flex-col h-screen">
-        <AuthProvider>
-          <header>
-            <Header />
-          </header>
-          <main className="flex grow">{children}</main>
-          <footer>
-            <Footer />
-          </footer>
-        </AuthProvider>
+        {/* <AuthProvider> */}
+        <header>
+          <Header />
+        </header>
+        <main className="flex grow">{children}</main>
+        <footer>
+          <Footer />
+        </footer>
+        {/* </AuthProvider> */}
       </body>
     </html>
   );

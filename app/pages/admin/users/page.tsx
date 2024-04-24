@@ -2,7 +2,7 @@ import CrudHeader from "@/components/crud/CrudHeader";
 import Pagination from "@/components/crud/Pagination";
 import UserTable from "./_components/UserTable";
 import UserTableSkeleton from "./_components/UserTableSkeleton";
-import { getFirstUsers, getNextUsers } from "./util/actions";
+// import { getFirstUsers, getNextUsers } from "./util/actions";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -18,8 +18,7 @@ const UsersPage = async ({ searchParams }: ParamsProps) => {
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
 
-  const { users, totalPages, lastVisible } = await getFirstUsers();
-
+  // const { users, totalPages, lastVisible } = await getFirstUsers();
 
   // async function nextPageHandler() {
   //   "use server";
@@ -42,7 +41,7 @@ const UsersPage = async ({ searchParams }: ParamsProps) => {
                 // users={users}
               />
             </Suspense>
-            <Pagination currentPage={currentPage} totalPages={totalPages} />
+            {/* <Pagination currentPage={currentPage} totalPages={totalPages} /> */}
           </div>
         </div>
       </div>

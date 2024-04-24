@@ -9,6 +9,7 @@ import { roleOptions } from "@/app/pages/admin/users/util/context";
 function UserForm({ action }: { action: ActionFunction }) {
   const [state, handleSubmit] = useFormState(action);
   const { user } = useUserContext();
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid gap-4 mb-4 sm:grid-cols-2">

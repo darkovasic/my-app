@@ -1,17 +1,17 @@
 "use client";
 
-// import { auth } from "@/app/lib/firebase";
 import { useRouter } from "next/navigation";
-import { createAuthUser } from "../util/actions";
-// import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { signup } from "../util/actions";
 import Input from "@/components/Input";
-// import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "./Button";
 import { Label } from "./Label";
 import { Icons } from "./Icons";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 const initialState = {
+  isError: false,
   message: "",
 };
 
@@ -32,16 +32,22 @@ function SubmitButton() {
   );
 }
 
+// function prettyDate(date: Date) {
+//   return new Intl.DateTimeFormat("en-US", {
+//     dateStyle: "full",
+//     timeStyle: "short",
+//   }).format(date);
+// }
+
 export function UserSignUpForm() {
   const router = useRouter();
-  const [state, formAction] = useFormState(createAuthUser, initialState);
+  const [state, formAction] = useFormState(signup, initialState);
   const { pending } = useFormStatus();
   console.log("[UserSignUpForm] pending: ", pending);
 
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [errors, setErrors] = useState("");
+  toast(state.message);
+
+  console.log("[UserSignUpForm] state: ", state);
 
   return (
     <div className="grid gap-6">
@@ -55,12 +61,9 @@ export function UserSignUpForm() {
               id="email"
               placeholder="name@example.com"
               type="email"
-              // onChange={(e) => setEmail(e.target.value)}
-              // value={email}
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              // disabled={isLoading}
               required
             />
           </div>
@@ -72,11 +75,8 @@ export function UserSignUpForm() {
               id="password"
               placeholder="Enter your password here"
               type="password"
-              // onChange={(e) => setPassword(e.target.value)}
-              // value={password}
               autoCapitalize="none"
               autoCorrect="off"
-              // disabled={isLoading}
               minLength={6}
               required
             />
@@ -89,11 +89,8 @@ export function UserSignUpForm() {
               id="confirm_password"
               placeholder="Confirm your password here"
               type="password"
-              // onChange={(e) => setPassword(e.target.value)}
-              // value={confirmPassword}
               autoCapitalize="none"
               autoCorrect="off"
-              // disabled={isLoading}
               minLength={6}
               required
             />

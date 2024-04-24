@@ -1,55 +1,53 @@
 "use server";
 
-import { auth } from "@/app/lib/firebase-config";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { UserAuthFirebase } from "./context";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export async function createAuthUser(
-  prevState: {
+import { createClient } from "@/lib/supabase/server";
+import { env } from "process";
+
+export async function login(email: string, password: string) {
+  const supabase = createClient();
+
+  const data = {
+    email,
+    password,
+  };
+
+  const { error } = await supabase.auth.signInWithPassword(data);
+
+  if (error) {
+    console.error("[error]: ", error);
+    redirect("/error");
+  }
+
+  revalidatePath("/", "layout");
+  redirect(process.env.APP_URL + "/pages");
+}
+
+export async function signup(
+  state: {
     message: string;
   },
   formData: FormData
 ) {
-  try {
-    await createUserWithEmailAndPassword(
-      auth,
-      formData.get("email") as string,
-      formData.get("password") as string
-    )
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log("[UserAuthForm] userCredential: ", userCredential);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error("[UserAuthForm] error: ", errorCode, errorMessage);
-      });
+  const supabase = createClient();
 
-    // await updateProfile(auth.currentUser, {
-    //   displayName: email,
-    // })
-    //   .then(() => {
-    //     console.log("updated successfully");
-    //   })
-    //   .catch((error) => {
-    //     console.error("error updating name");
-    //     console.error(error);
-    //   });
-    return { isError: false, message: "User added successfully." };
-  } catch (error) {
-    return { isError: true, message: "Error adding user. Error: " + error };
-  }
-}
-
-function toFirebase(formData: FormData) {
-  const user: UserAuthFirebase = {
-    email: formData.get("email")!,
-    password: formData.get("password")!,
+  // type-casting here for convenience
+  // in practice, you should validate your inputs
+  const data = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
   };
-  return user;
+
+  const { error } = await supabase.auth.signUp(data);
+
+  if (error) {
+    return { isError: true, message: "Error adding user. Error: " + error };
+    // redirect("/error");
+  }
+
+  revalidatePath("/", "layout");
+  return { isError: false, message: "User added successfully." };
+  // redirect("/");
 }

@@ -1,5 +1,5 @@
 import UserDropdownMenu from "./UserDropdownMenu";
-import { searchUsers } from "@/app/pages/admin/users/util/actions";
+// import { searchUsers } from "@/app/pages/admin/users/util/actions";
 
 async function UserTable({
   query,
@@ -8,7 +8,7 @@ async function UserTable({
   query: string;
   currentPage: number;
 }) {
-  const filteredUsers = await searchUsers(query);
+  // const filteredUsers = await searchUsers(query);
 
   return (
     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -35,7 +35,7 @@ async function UserTable({
         </tr>
       </thead>
       <tbody>
-        {filteredUsers.map((user) => {
+        {/* {filteredUsers.map((user) => {
           return (
             <tr key={user?.id} className="border-b dark:border-gray-700">
               <th
@@ -53,7 +53,7 @@ async function UserTable({
               </td>
             </tr>
           );
-        })}
+        })} */}
       </tbody>
     </table>
   );
