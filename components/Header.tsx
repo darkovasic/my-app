@@ -7,6 +7,7 @@ import NavLink from "@/components/NavLink";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { toast } from "sonner";
+import HeaderUserMenu from "./HeaderUserMenu";
 
 // import { useAuth } from "./AuthProvider";
 
@@ -62,45 +63,7 @@ async function Header() {
           <NavLink path="pages/user" label="User" />
         </li>
       </ul>
-      {/* Logout button */}
-      {data?.user && (
-        <div className="flex gap-6 items-center">
-          {/* <button
-            className="text-gray-100 hover:text-blue-300"
-            onClick={logout}
-          >
-            Logout
-          </button> */}
-          <div className="flex flex-col">
-            {/* <p className="text-white text-sm font-semibold">
-              {data.user.displayName}
-            </p> */}
-            <p className="text-gray-400 text-xs font-semibold">
-              {data.user.email}
-            </p>
-          </div>
-          {data?.user && (
-            <div className="bg-pink-600 text-white text-sm font-semibold px-2 py-1 rounded-full h-6">
-              User
-            </div>
-          )}
-          {data?.user && (
-            <div className="bg-emerald-600 text-white text-sm font-semibold px-2 py-1 rounded-full h-6">
-              Pro
-            </div>
-          )}
-          {data?.user && (
-            <div className="bg-orange-600 text-white text-sm font-semibold px-2 py-1 rounded-full h-6">
-              Admin
-            </div>
-          )}
-        </div>
-      )}
-      {/* {data?.user && (
-        <button className="text-gray-100 hover:text-blue-300" onClick={logout}>
-          Logout
-        </button>
-      )} */}
+      {data?.user?.email && <HeaderUserMenu email={data?.user?.email} />}
     </nav>
   );
 }

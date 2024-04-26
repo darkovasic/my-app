@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export async function login(email: string, password: string) {
   const supabase = createClient();
@@ -51,4 +52,17 @@ export async function signup(
   revalidatePath("/", "layout");
   return { isError: false, message: "User added successfully." };
   // redirect("/");
+}
+
+export async function signout() {
+  const supabase = createClient();
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error("[error]: ", error);
+    return { isError: true, message: error.message };
+  }
+
+  redirect("/auth/login");
 }
