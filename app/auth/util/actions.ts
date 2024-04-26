@@ -1,10 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-
 import { createClient } from "@/lib/supabase/server";
-import { env } from "process";
 
 export async function login(email: string, password: string) {
   const supabase = createClient();
@@ -18,11 +15,10 @@ export async function login(email: string, password: string) {
 
   if (error) {
     console.error("[error]: ", error);
-    redirect("/error");
+    return { isError: true, message: error.message };
   }
 
   revalidatePath("/", "layout");
-  redirect(process.env.APP_URL + "/pages");
 }
 
 export async function signup(

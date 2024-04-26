@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Button } from "./Button";
 import { Label } from "./Label";
 import { Icons } from "./Icons";
+import { toast } from "sonner";
 
 export function UserLogInForm() {
   const router = useRouter();
@@ -25,23 +26,17 @@ export function UserLogInForm() {
   //     .catch(() => console.error("Something went wrong"));
   // };
 
-  function onSubmit(event: React.SyntheticEvent) {
+  async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-    login(email, password)
-      .then((userCredential) => {
-        setIsLoading(false);
-        // const user = userCredential.user;
-        console.log("[UserAuthForm] userCredential: ", userCredential);
-        router.push("/pages");
-      })
-      .catch((error) => {
-        const errorCode: string = error.code;
-        const errorMessage: string = error.message;
-        setErrors(errorMessage);
-        setIsLoading(false);
-        console.error("[UserAuthForm] error: ", errorCode, errorMessage);
-      });
+    const response = await login(email, password);
+    setIsLoading(false);
+
+    if (response?.isError) {
+      toast.error(response?.message);
+    } else {
+      router.push("/pages");
+    }
   }
 
   return (
