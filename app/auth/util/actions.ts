@@ -23,14 +23,17 @@ export async function login(email: string, password: string) {
 
 export async function signup(
   state: {
+    isError: boolean;
     message: string;
   },
   formData: FormData
 ) {
   const supabase = createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+  if (formData.get("password") !== formData.get("confirm_password")) {
+    return { isError: true, message: "Passwords do not match." };
+  }
+
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -38,8 +41,10 @@ export async function signup(
 
   const { error } = await supabase.auth.signUp(data);
 
+  console.log("auth actios1: ", error?.message);
   if (error) {
-    return { isError: true, message: "Error adding user. Error: " + error };
+    console.log("auth actios2: ", error.message);
+    return { isError: true, message: error.message };
     // redirect("/error");
   }
 

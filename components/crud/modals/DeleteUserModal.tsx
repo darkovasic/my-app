@@ -1,4 +1,4 @@
-import { deleteUser } from "@/app/pages/admin/users/util/actions";
+// import { deleteUser } from "@/app/pages/admin/users/util/actions";
 import { useUserContext } from "@/app/pages/admin/users/util/context";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -6,7 +6,7 @@ import type { ForwardedRef } from "react";
 import { forwardRef } from "react";
 
 const handleDeleteClick = (id: string) => async (): Promise<void> => {
-  await deleteUser(id);
+  // await deleteUser(id);
   return;
 };
 

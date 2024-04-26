@@ -17,7 +17,7 @@ const initialState = {
 
 function SubmitButton() {
   const { pending } = useFormStatus();
-  console.log("[SubmitButton] pending: ", pending);
+  // console.log("[SubmitButton] pending: ", pending);
   return (
     <Button
       type="submit"
@@ -42,10 +42,11 @@ function SubmitButton() {
 export function UserSignUpForm() {
   const router = useRouter();
   const [state, formAction] = useFormState(signup, initialState);
-  const { pending } = useFormStatus();
-  console.log("[UserSignUpForm] pending: ", pending);
+  // const { pending } = useFormStatus();
 
-  toast(state.message);
+  if (state.isError === true) {
+    toast.error(state.message);
+  }
 
   console.log("[UserSignUpForm] state: ", state);
 
@@ -77,7 +78,7 @@ export function UserSignUpForm() {
               type="password"
               autoCapitalize="none"
               autoCorrect="off"
-              minLength={6}
+              // minLength={6}
               required
             />
           </div>
@@ -91,8 +92,8 @@ export function UserSignUpForm() {
               type="password"
               autoCapitalize="none"
               autoCorrect="off"
-              minLength={6}
-              required
+              // minLength={6}
+              // required
             />
           </div>
           <SubmitButton />
@@ -108,7 +109,7 @@ export function UserSignUpForm() {
           </span>
         </div>
       </div>
-      <Button
+      {/* <Button
         type="button"
         disabled={pending}
         parentClasses={
@@ -121,7 +122,7 @@ export function UserSignUpForm() {
           <Icons.google className="mr-2 h-4 w-4" />
         )}{" "}
         Google
-      </Button>
+      </Button> */}
     </div>
   );
 }

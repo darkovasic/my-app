@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { ItemAccess, type Item } from "../api/items/route";
+// import { ItemAccess, type Item } from "../api/items/route_old";
 import { cookies } from "next/headers";
 
 export default async function Home() {
