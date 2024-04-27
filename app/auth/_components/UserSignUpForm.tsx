@@ -3,34 +3,11 @@
 import { useRouter } from "next/navigation";
 import { signup } from "../util/actions";
 import Input from "@/components/Input";
-import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "./Button";
 import { Label } from "./Label";
 import { Icons } from "./Icons";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-
-const initialState = {
-  isError: false,
-  message: "",
-};
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  // console.log("[SubmitButton] pending: ", pending);
-  return (
-    <Button
-      type="submit"
-      disabled={pending}
-      parentClasses={
-        "bg-login-primary mt-1 text-login-primary-foreground shadow hover:bg-login-primary/90"
-      }
-    >
-      {pending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-      Sign Up with Email
-    </Button>
-  );
-}
 
 // function prettyDate(date: Date) {
 //   return new Intl.DateTimeFormat("en-US", {
@@ -41,18 +18,32 @@ function SubmitButton() {
 
 export function UserSignUpForm() {
   const router = useRouter();
-  const [state, formAction] = useFormState(signup, initialState);
-  // const { pending } = useFormStatus();
+  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  if (state.isError === true) {
-    toast.error(state.message);
+  async function formAction(event: React.SyntheticEvent) {
+    event.preventDefault();
+    setIsLoading(true);
+    const data = {
+      email,
+      password,
+      confirmPassword,
+    };
+    const response = await signup(data);
+    setIsLoading(false);
+
+    if (response?.isError) {
+      toast.error(response?.message);
+    } else {
+      router.push("/pages");
+    }
   }
-
-  console.log("[UserSignUpForm] state: ", state);
 
   return (
     <div className="grid gap-6">
-      <form action={formAction}>
+      <form onSubmit={formAction}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -62,9 +53,12 @@ export function UserSignUpForm() {
               id="email"
               placeholder="name@example.com"
               type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
+              disabled={isLoading}
               required
             />
           </div>
@@ -76,9 +70,12 @@ export function UserSignUpForm() {
               id="password"
               placeholder="Enter your password here"
               type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               autoCapitalize="none"
               autoCorrect="off"
-              // minLength={6}
+              minLength={6}
+              disabled={isLoading}
               required
             />
           </div>
@@ -90,13 +87,27 @@ export function UserSignUpForm() {
               id="confirm_password"
               placeholder="Confirm your password here"
               type="password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
               autoCapitalize="none"
               autoCorrect="off"
-              // minLength={6}
-              // required
+              minLength={6}
+              disabled={isLoading}
+              required
             />
           </div>
-          <SubmitButton />
+          <Button
+            type="submit"
+            disabled={isLoading}
+            parentClasses={
+              "bg-login-primary mt-1 text-login-primary-foreground shadow hover:bg-login-primary/90"
+            }
+          >
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Sign Up with Email
+          </Button>
         </div>
       </form>
       <div className="relative">

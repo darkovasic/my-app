@@ -22,36 +22,25 @@ export async function login(email: string, password: string) {
   revalidatePath("/", "layout");
 }
 
-export async function signup(
-  state: {
-    isError: boolean;
-    message: string;
-  },
-  formData: FormData
-) {
+export async function signup(data: {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}) {
   const supabase = createClient();
 
-  if (formData.get("password") !== formData.get("confirm_password")) {
+  if (data.password !== data.confirmPassword) {
     return { isError: true, message: "Passwords do not match." };
   }
 
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
-
   const { error } = await supabase.auth.signUp(data);
 
-  console.log("auth actios1: ", error?.message);
   if (error) {
-    console.log("auth actios2: ", error.message);
     return { isError: true, message: error.message };
-    // redirect("/error");
   }
 
   revalidatePath("/", "layout");
   return { isError: false, message: "User added successfully." };
-  // redirect("/");
 }
 
 export async function signout() {
