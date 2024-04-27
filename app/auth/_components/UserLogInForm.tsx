@@ -13,11 +13,9 @@ import { toast } from "sonner";
 export function UserLogInForm() {
   const router = useRouter();
   // const auth = useAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState("");
 
   // const loginGoogle = () => {
   //   auth
@@ -33,7 +31,12 @@ export function UserLogInForm() {
     setIsLoading(false);
 
     if (response?.isError) {
-      toast.error(response?.message);
+      toast.error(response.message, {
+        action: {
+          label: "Copy",
+          onClick: () => navigator.clipboard.writeText(response.message),
+        },
+      });
     } else {
       router.push("/pages");
     }

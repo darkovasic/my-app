@@ -35,7 +35,12 @@ export function UserSignUpForm() {
     setIsLoading(false);
 
     if (response?.isError) {
-      toast.error(response?.message);
+      toast.error(response.message, {
+        action: {
+          label: "Copy",
+          onClick: () => navigator.clipboard.writeText(response.message),
+        },
+      });
     } else {
       router.push("/pages");
     }
@@ -74,7 +79,7 @@ export function UserSignUpForm() {
               value={password}
               autoCapitalize="none"
               autoCorrect="off"
-              minLength={6}
+              // minLength={6}
               disabled={isLoading}
               required
             />
@@ -91,7 +96,7 @@ export function UserSignUpForm() {
               value={confirmPassword}
               autoCapitalize="none"
               autoCorrect="off"
-              minLength={6}
+              // minLength={6}
               disabled={isLoading}
               required
             />
