@@ -16,9 +16,9 @@ async function Header() {
 
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
-    console.log("[Header] redirecting...");
+    console.log("[Header] error:", error);
     // toast.error(error?.message);
-    // redirect("/auth/login");
+    redirect("/auth/login");
   }
   // const activePath = usePathname();
   // const auth = useAuth();
@@ -40,7 +40,6 @@ async function Header() {
     <nav
       className={`bg-gray-800 flex justify-between items-center h-18 px-8 py-4`}
     >
-      {/* <div className="flex items-center"> */}
       <Link href="/" className="flex items-center">
         <BeakerIcon className="h-6 w-6 text-gray-100" />
         <p
@@ -49,7 +48,6 @@ async function Header() {
           MyApp
         </p>
       </Link>
-      {/* </div> */}
       <ul className="flex gap-6 list-none text-gray-100 font-semibold">
         <li key="pages/service" className={`hover:text-blue-300`}>
           <NavLink path="pages/admin" label="Admin" />

@@ -2,7 +2,7 @@
 
 // import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
-import { login } from "../util/actions";
+import { login, loginGoogleAction } from "../util/actions";
 import Input from "@/components/Input";
 import { useState } from "react";
 import { Button } from "./Button";
@@ -17,12 +17,20 @@ export function UserLogInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const loginGoogle = () => {
-  //   auth
-  //     ?.loginGoogle()
-  //     .then(() => console.log("Logged in!"))
-  //     .catch(() => console.error("Something went wrong"));
-  // };
+  const loginGoogle = async () => {
+    setIsLoading(true);
+    const response = await loginGoogleAction();
+    setIsLoading(false);
+
+    if (response?.isError) {
+      toast.error(response.message, {
+        action: {
+          label: "Copy",
+          onClick: () => navigator.clipboard.writeText(response.message),
+        },
+      });
+    }
+  };
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -106,7 +114,7 @@ export function UserLogInForm() {
       <Button
         type="button"
         disabled={isLoading}
-        // onClick={loginGoogle}
+        onClick={loginGoogle}
         parentClasses={
           "border hover:bg-login-secondary text-login-secondary-foreground shadow-sm"
         }

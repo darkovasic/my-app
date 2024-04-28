@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 export async function login(email: string, password: string) {
   const supabase = createClient();
@@ -20,6 +21,27 @@ export async function login(email: string, password: string) {
   }
 
   revalidatePath("/", "layout");
+}
+
+export async function loginGoogleAction() {
+  const supabase = createClient();
+  const origin = headers().get("origin");
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+    },
+  });
+
+  console.error("[data]: ", data);
+  if (error) {
+    console.error("[error]: ", error);
+    return { isError: true, message: error.message };
+  }
+
+  revalidatePath("/", "layout");
+  return redirect(data.url);
 }
 
 export async function signup(data: {
