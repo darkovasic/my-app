@@ -1,16 +1,20 @@
 // UserContext.ts
 
 import { createContext, useContext } from "react";
-import type { FieldValue, Timestamp } from "firebase/firestore";
+// import type { FieldValue, Timestamp } from "firebase/firestore";
 import type { FormEventHandler } from "react";
 
 export type ActionError = {
   isError: boolean;
-  message: string;
+  status?: number;
+  message: {
+    title: string;
+    description?: string;
+  };
 };
 
 export type ActionFunction = (
-  formData: FormData
+  data: CreateUserTypes
 ) => Promise<undefined | ActionError>;
 
 export type SubmissionState = {
@@ -29,18 +33,18 @@ export type User = {
   lastName?: string;
   email?: string;
   description?: string;
-  createdAt?: Timestamp | string;
-  updatedAt?: Timestamp | string;
+  // createdAt?: Timestamp | string;
+  // updatedAt?: Timestamp | string;
 };
 
-export type UserFirebase = {
-  role?: FormDataEntryValue | null;
-  firstName?: FormDataEntryValue | null;
-  lastName?: FormDataEntryValue | null;
-  email?: FormDataEntryValue | null;
-  description?: FormDataEntryValue | null;
-  createdAt?: FieldValue;
-  updatedAt?: FieldValue;
+export type CreateUserTypes = {
+  role: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  description?: string;
 };
 
 export type FullUser = User & {
@@ -49,8 +53,8 @@ export type FullUser = User & {
 
 export const roleOptions = [
   { value: "admin", label: "Admin" },
+  { value: "moderator", label: "Moderator" },
   { value: "user", label: "User" },
-  { value: "guest", label: "Guest" },
 ];
 
 type UserContextType = {

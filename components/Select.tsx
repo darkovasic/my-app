@@ -7,6 +7,7 @@ import {
 import classnames from "classnames";
 import { forwardRef } from "react";
 import type { ForwardedRef } from "react";
+import type { InputHTMLAttributes } from "react";
 
 type SelectOptions = {
   value: string;
@@ -19,12 +20,12 @@ function Select({
   defaultValue,
   placeholder,
   options,
-}: {
-  id: string;
-  label: string;
+  onValueChange,
+}: InputHTMLAttributes<HTMLSelectElement> & {
+  label?: string;
   defaultValue: string;
-  placeholder: string;
   options: SelectOptions[];
+  onValueChange: (value: string) => void;
 }) {
   return (
     <div>
@@ -36,7 +37,11 @@ function Select({
           {label}
         </label>
       )}
-      <RadixSelect.Root name={id} defaultValue={defaultValue}>
+      <RadixSelect.Root
+        name={id}
+        defaultValue={defaultValue}
+        onValueChange={onValueChange}
+      >
         <RadixSelect.Trigger
           id={id}
           className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-1
