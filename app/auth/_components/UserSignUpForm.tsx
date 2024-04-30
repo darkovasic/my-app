@@ -79,7 +79,7 @@ export function UserSignUpForm() {
               value={password}
               autoCapitalize="none"
               autoCorrect="off"
-              // minLength={6}
+              minLength={6}
               disabled={isLoading}
               required
             />
@@ -96,7 +96,7 @@ export function UserSignUpForm() {
               value={confirmPassword}
               autoCapitalize="none"
               autoCorrect="off"
-              // minLength={6}
+              minLength={6}
               disabled={isLoading}
               required
             />

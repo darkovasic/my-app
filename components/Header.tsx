@@ -1,12 +1,9 @@
-// "use client";
-
 import { BeakerIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import NavLink from "@/components/NavLink";
 // import { usePathname } from "next/navigation";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { toast } from "sonner";
 import HeaderUserMenu from "./HeaderUserMenu";
 
 // import { useAuth } from "./AuthProvider";
@@ -17,7 +14,6 @@ async function Header() {
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
     console.log("[Header] error:", error);
-    // toast.error(error?.message);
     redirect("/auth/login");
   }
   // const activePath = usePathname();
