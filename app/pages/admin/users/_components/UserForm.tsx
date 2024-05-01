@@ -9,7 +9,13 @@ import { roleOptions } from "@/app/pages/admin/users/util/context";
 import { toast } from "sonner";
 import { useState } from "react";
 
-function UserForm({ action }: { action: ActionFunction }) {
+function UserForm({
+  action,
+  isUpdate = false,
+}: {
+  action: ActionFunction;
+  isUpdate: boolean;
+}) {
   const { user } = useUserContext();
 
   console.log("[UserForm] user:", user);
@@ -21,11 +27,12 @@ function UserForm({ action }: { action: ActionFunction }) {
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(user.description || "");
 
   async function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     const data = {
+      id: user.id,
       firstName,
       lastName,
       email,
@@ -98,7 +105,7 @@ function UserForm({ action }: { action: ActionFunction }) {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
           minLength={6}
-          required
+          required={!isUpdate}
         />
         <Input
           id={`repeatPassword`}
@@ -107,7 +114,7 @@ function UserForm({ action }: { action: ActionFunction }) {
           onChange={(e) => setConfirmPassword(e.target.value)}
           value={confirmPassword}
           minLength={6}
-          required
+          required={!isUpdate}
         />
         <div className="sm:col-span-2">
           <label

@@ -61,7 +61,7 @@ const UpdateUserModal = forwardRef(function UpdateUserModal(
               </Dialog.Close>
             </div>
             {/* <!-- Modal body --> */}
-            <UserForm action={updateUser} />
+            <UserForm action={updateUser} isUpdate={true} />
           </div>
         </Dialog.Content>
       </Dialog.Portal>

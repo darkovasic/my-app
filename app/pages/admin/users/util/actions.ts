@@ -90,48 +90,6 @@ export async function createUser(
   }
 }
 
-// const getUsersQuery = async (
-//   query: Query
-// ): Promise<{ users: FullUser[]; lastVisible: QueryDocumentSnapshot }> => {
-//   const querySnapshot = await getDocs(query);
-//   const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-
-//   const users: FullUser[] = querySnapshot.docs.map((doc) => {
-//     const data: User = doc.data();
-//     return { id: doc.id, ...toUserPage(data) };
-//   });
-
-//   return { users, lastVisible };
-// };
-
-// export const getFirstUsers = async (pageLimit = ITEMS_PER_PAGE) => {
-//   const count = await getCount();
-//   const totalPages = Math.ceil(count / pageLimit);
-
-//   const first = firestoreQuery(
-//     collection(db, schema),
-//     orderBy("createdAt", "desc"),
-//     limit(pageLimit)
-//   );
-
-//   const { users, lastVisible } = await getUsersQuery(first);
-
-//   return { users, totalPages, lastVisible };
-// };
-
-// export const getNextUsers = async (qs: QueryDocumentSnapshot) => {
-//   const next = firestoreQuery(
-//     collection(db, schema),
-//     orderBy("createdAt", "desc"),
-//     startAt(qs),
-//     limit(10)
-//   );
-
-//   const { users, lastVisible } = await getUsersQuery(next);
-
-//   return { users, lastVisible };
-// };
-
 export async function deleteUser(id: string) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -158,16 +116,6 @@ export async function deleteUser(id: string) {
   return { message: { title: "User is deleted." } };
 }
 
-export async function getUser(id: string) {
-  // const userRef = doc(db, schema, id);
-  // const userSnap = await getDoc(userRef);
-  // if (userSnap.exists()) {
-  //   console.log("User data: ", userSnap.data());
-  // } else {
-  //   console.log("No such user!");
-  // }
-}
-
 export async function updateUser(data: UserTypes): Promise<ActionError> {
   if (data.id) {
     const supabase = createClient(
@@ -183,7 +131,7 @@ export async function updateUser(data: UserTypes): Promise<ActionError> {
 
     const { error } = await supabase.auth.admin.updateUserById(data.id, {
       email: data.email,
-      password: data.password,
+      password: data.password || undefined,
       email_confirm: true,
       user_metadata: {
         first_name: data.firstName,
@@ -219,15 +167,6 @@ export async function searchUsers(term?: string) {
       },
     }
   );
-
-  // function createQuery(field: string, value: string) {
-  //   return firestoreQuery(
-  //     usersRef,
-  //     where(field, "==", value),
-  //     orderBy("createdAt", "desc"),
-  //     limit(ITEMS_PER_PAGE)
-  //   );
-  // }
 
   if (term) {
     //   noStore();
