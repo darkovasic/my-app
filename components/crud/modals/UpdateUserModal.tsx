@@ -1,7 +1,7 @@
-"use client";
+// "use client";
 
 import UserForm from "@/app/pages/admin/users/_components/UserForm";
-// import { updateUser } from "@/app/pages/admin/users/util/actions";
+import { updateUser } from "@/app/pages/admin/users/util/actions";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { ForwardedRef } from "react";
@@ -61,7 +61,7 @@ const UpdateUserModal = forwardRef(function UpdateUserModal(
               </Dialog.Close>
             </div>
             {/* <!-- Modal body --> */}
-            {/* <UserForm action={updateUser} /> */}
+            <UserForm action={updateUser} />
           </div>
         </Dialog.Content>
       </Dialog.Portal>

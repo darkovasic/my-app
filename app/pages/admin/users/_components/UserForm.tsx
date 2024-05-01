@@ -4,23 +4,24 @@ import Input from "@/components/Input";
 import Select from "@/components/Select";
 import type { ActionFunction } from "../util/context";
 import { useUserContext } from "../util/context";
-import { useFormState } from "../util/hooks";
 import SubmitButton from "./SubmitButton";
 import { roleOptions } from "@/app/pages/admin/users/util/context";
 import { toast } from "sonner";
 import { useState } from "react";
 
 function UserForm({ action }: { action: ActionFunction }) {
+  const { user } = useUserContext();
+
+  console.log("[UserForm] user:", user);
+
   const [isLoading, setIsLoading] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState(user.firstName || "");
+  const [lastName, setLastName] = useState(user.lastName || "");
+  const [email, setEmail] = useState(user.email || "");
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [description, setDescription] = useState("");
-
-  const { user } = useUserContext();
 
   async function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -63,7 +64,6 @@ function UserForm({ action }: { action: ActionFunction }) {
           type={`text`}
           onChange={(e) => setFirstName(e.target.value)}
           value={firstName}
-          defaultValue={user.firstName}
           required
         />
         <Input
@@ -72,7 +72,6 @@ function UserForm({ action }: { action: ActionFunction }) {
           type={`text`}
           onChange={(e) => setLastName(e.target.value)}
           value={lastName}
-          defaultValue={user.lastName}
           required
         />
         <Input
@@ -81,7 +80,6 @@ function UserForm({ action }: { action: ActionFunction }) {
           type={`email`}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
-          defaultValue={user.email}
           required
         />
         <Select
@@ -130,6 +128,7 @@ function UserForm({ action }: { action: ActionFunction }) {
                       dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                       dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Write user description here"
+            disabled
           ></textarea>
         </div>
       </div>

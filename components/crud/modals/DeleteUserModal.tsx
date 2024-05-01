@@ -1,12 +1,30 @@
-// import { deleteUser } from "@/app/pages/admin/users/util/actions";
+"use client";
+
+import { deleteUser } from "@/app/pages/admin/users/util/actions";
 import { useUserContext } from "@/app/pages/admin/users/util/context";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { ForwardedRef } from "react";
 import { forwardRef } from "react";
+import { toast } from "sonner";
 
 const handleDeleteClick = (id: string) => async (): Promise<void> => {
-  // await deleteUser(id);
+  const response = await deleteUser(id);
+
+  if (response?.isError) {
+    toast.error(response.message.title, {
+      description: response.message.description,
+      action: {
+        label: "Copy",
+        onClick: () =>
+          navigator.clipboard.writeText(response.message.description || ""),
+      },
+    });
+  } else {
+    toast.success(response?.message.title, {
+      description: response?.message.description,
+    });
+  }
   return;
 };
 

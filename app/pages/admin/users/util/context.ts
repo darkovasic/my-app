@@ -1,7 +1,6 @@
 // UserContext.ts
 
 import { createContext, useContext } from "react";
-// import type { FieldValue, Timestamp } from "firebase/firestore";
 import type { FormEventHandler } from "react";
 
 export type ActionError = {
@@ -14,7 +13,7 @@ export type ActionError = {
 };
 
 export type ActionFunction = (
-  data: CreateUserTypes
+  data: UserTypes
 ) => Promise<undefined | ActionError>;
 
 export type SubmissionState = {
@@ -33,11 +32,12 @@ export type User = {
   lastName?: string;
   email?: string;
   description?: string;
-  // createdAt?: Timestamp | string;
-  // updatedAt?: Timestamp | string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
-export type CreateUserTypes = {
+export type UserTypes = {
+  id?: string;
   role: string;
   firstName: string;
   lastName: string;
