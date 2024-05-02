@@ -17,13 +17,14 @@ type SelectOptions = {
 function Select({
   id,
   label,
-  defaultValue,
+  value,
   placeholder,
   options,
   onValueChange,
 }: InputHTMLAttributes<HTMLSelectElement> & {
   label?: string;
-  defaultValue: string;
+  value: string;
+  placeholder: string;
   options: SelectOptions[];
   onValueChange: (value: string) => void;
 }) {
@@ -37,11 +38,7 @@ function Select({
           {label}
         </label>
       )}
-      <RadixSelect.Root
-        name={id}
-        defaultValue={defaultValue}
-        onValueChange={onValueChange}
-      >
+      <RadixSelect.Root name={id} value={value} onValueChange={onValueChange}>
         <RadixSelect.Trigger
           id={id}
           className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-1
