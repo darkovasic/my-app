@@ -4,51 +4,55 @@ import { createClient, type User as SupabaseUser } from "@supabase/supabase-js";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import type { User, FullUser, ActionError, UserTypes } from "./context";
 
-// const schema = "users";
-// const usersRef = collection(db, schema);
 const ITEMS_PER_PAGE = 10;
 
-// function toFirebase(formData: FormData, isUpdate: boolean) {
-//   const user: UserFirebase = {
-//     firstName: formData.get("firstName"),
-//     lastName: formData.get("lastName"),
-//     email: formData.get("email"),
-//     role: formData.get("role"),
-//     description: formData.get("description"),
-//     createdAt: serverTimestamp(),
-//     updatedAt: serverTimestamp(),
-//   };
-//   isUpdate ? delete user.createdAt : delete user.updatedAt;
-//   return user;
-// }
+const setClaim = async (uid: string, claim: string, value: string) => {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    }
+  );
+  const { data, error } = await supabase.rpc("set_claim", {
+    uid,
+    claim,
+    value,
+  });
+  return { data, error };
+};
 
 function toUserPage(data: SupabaseUser) {
   return {
+    id: data.id,
     firstName: data.user_metadata.first_name,
     lastName: data.user_metadata.last_name,
     email: data.email,
-    role: data.role,
+    role: data.app_metadata.user_role,
     // description: data.description,
     createdAt: new Date(data.created_at).toLocaleString(),
     updatedAt: data.updated_at
       ? new Date(data.updated_at).toLocaleString()
-      : "",
+      : "Never",
   };
 }
 
 export async function createUser(
-  data: UserTypes
+  form_data: UserTypes
 ): Promise<ActionError | undefined> {
   try {
-    if (!data.password) {
+    if (!form_data.password) {
       throw new Error("Please enter password for this user.");
     }
 
-    if (data.password.length < 6) {
+    if (form_data.password.length < 6) {
       throw new Error("Password must have at leaset 6 characters.");
     }
 
-    if (data.password !== data.confirmPassword) {
+    if (form_data.password !== form_data.confirmPassword) {
       throw new Error("Passwords do not match.");
     }
 
@@ -63,24 +67,36 @@ export async function createUser(
       }
     );
 
-    const { error } = await supabase.auth.admin.createUser({
-      email: data.email,
-      password: data.password,
+    const { data: response, error } = await supabase.auth.admin.createUser({
+      email: form_data.email,
+      password: form_data.password,
       email_confirm: true,
       user_metadata: {
-        first_name: data.firstName,
-        last_name: data.lastName,
-        full_name: `${data.firstName} ${data.lastName}`,
-        user_role: data.role,
+        first_name: form_data.firstName,
+        last_name: form_data.lastName,
+        full_name: `${form_data.firstName} ${form_data.lastName}`,
       },
     });
-
+    console.log("[createUser response: ],", response);
+    console.log("[createUser form_data: ],", form_data);
     if (error) {
       return {
         isError: true,
         status: error.status,
         message: { title: "Error adding user", description: error.message },
       };
+    } else {
+      const { error } = await setClaim(
+        response.user.id,
+        "user_role",
+        form_data.role
+      );
+      if (error) {
+        return {
+          isError: true,
+          message: { title: "Error adding role", description: error.message },
+        };
+      }
     }
 
     revalidatePath("/pages/service/users");
@@ -129,17 +145,19 @@ export async function updateUser(data: UserTypes): Promise<ActionError> {
       }
     );
 
-    const { error } = await supabase.auth.admin.updateUserById(data.id, {
-      email: data.email,
-      password: data.password || undefined,
-      email_confirm: true,
-      user_metadata: {
-        first_name: data.firstName,
-        last_name: data.lastName,
-        full_name: `${data.firstName} ${data.lastName}`,
-        user_role: data.role,
-      },
-    });
+    const { data: response, error } = await supabase.auth.admin.updateUserById(
+      data.id,
+      {
+        email: data.email,
+        password: data.password || undefined,
+        email_confirm: true,
+        user_metadata: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          full_name: `${data.firstName} ${data.lastName}`,
+        },
+      }
+    );
 
     if (error) {
       return {
@@ -147,6 +165,15 @@ export async function updateUser(data: UserTypes): Promise<ActionError> {
         status: error.status,
         message: { title: "Error adding user", description: error.message },
       };
+    } else {
+      const { error } = await setClaim(
+        response.user.id,
+        "user_role",
+        data.role
+      );
+      if (error) {
+        console.error("action set_claim", error.message);
+      }
     }
 
     revalidatePath("/pages/service/users");
@@ -199,7 +226,7 @@ export async function searchUsers(term?: string) {
   });
 
   const usersFrontend: FullUser[] = users.map((user) => {
-    return { id: user.id, ...toUserPage(user) };
+    return { ...toUserPage(user) };
   });
 
   return usersFrontend;

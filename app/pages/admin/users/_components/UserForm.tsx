@@ -14,17 +14,17 @@ function UserForm({
   isUpdate = false,
 }: {
   action: ActionFunction;
-  isUpdate: boolean;
+  isUpdate?: boolean;
 }) {
   const { user } = useUserContext();
 
-  console.log("[UserForm] user:", user);
+  // console.log("[UserForm] user:", user);
 
   const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState(user.firstName || "");
   const [lastName, setLastName] = useState(user.lastName || "");
   const [email, setEmail] = useState(user.email || "");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState(user.role || "user");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [description, setDescription] = useState(user.description || "");
@@ -95,7 +95,6 @@ function UserForm({
           onValueChange={(value) => setRole(value)}
           value={role}
           placeholder="Select role..."
-          defaultValue={user.role ?? "user"}
           options={roleOptions}
         />
         <Input
