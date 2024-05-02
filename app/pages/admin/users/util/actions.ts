@@ -1,22 +1,14 @@
 "use server";
 
-import { createClient, type User as SupabaseUser } from "@supabase/supabase-js";
+import { type User as SupabaseUser } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/admin";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import type { User, FullUser, ActionError, UserTypes } from "./context";
 
 const ITEMS_PER_PAGE = 10;
 
 const setClaim = async (uid: string, claim: string, value: string) => {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    }
-  );
+  const supabase = createClient();
   const { data, error } = await supabase.rpc("set_claim", {
     uid,
     claim,
@@ -56,16 +48,7 @@ export async function createUser(
       throw new Error("Passwords do not match.");
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false,
-        },
-      }
-    );
+    const supabase = createClient();
 
     const { data: response, error } = await supabase.auth.admin.createUser({
       email: form_data.email,
@@ -107,16 +90,7 @@ export async function createUser(
 }
 
 export async function deleteUser(id: string) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    }
-  );
+  const supabase = createClient();
 
   const { error } = await supabase.auth.admin.deleteUser(id);
 
@@ -134,16 +108,7 @@ export async function deleteUser(id: string) {
 
 export async function updateUser(data: UserTypes): Promise<ActionError> {
   if (data.id) {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false,
-        },
-      }
-    );
+    const supabase = createClient();
 
     const { data: response, error } = await supabase.auth.admin.updateUserById(
       data.id,
@@ -184,16 +149,7 @@ export async function updateUser(data: UserTypes): Promise<ActionError> {
 }
 
 export async function searchUsers(term?: string) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    }
-  );
+  const supabase = createClient();
 
   if (term) {
     //   noStore();
